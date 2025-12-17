@@ -1,0 +1,50 @@
+name: Release (prepare)
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.repository == 'speckit/spectest'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@speckit'
+          always-auth: true
+
+      - run: pnpm install --frozen-lockfile
+
+      # Opens/updates the Version Packages PR; publishes when the Version PR merges
+      - name: Create/Update Version PR
+        uses: changesets/action@v1
+        with:
+          title: 'chore(release): version packages'
+          createGithubReleases: true
+          # Use CI-specific release script: relies on version PR having been merged
+          # so package.json already contains the bumped version.
+          publish: pnpm run release:ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
