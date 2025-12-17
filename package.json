@@ -1,6 +1,6 @@
 {
   "name": "@speckit/spectest",
-  "version": "0.16.0",
+  "version": "0.1.0",
   "description": "AI-native system for spec-driven automation test development with Playwright",
   "keywords": [
     "spectest",
