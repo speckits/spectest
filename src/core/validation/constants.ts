@@ -20,7 +20,7 @@ export const VALIDATION_MESSAGES = {
   REQUIREMENT_NO_SCENARIOS: 'Requirement must have at least one scenario',
   SPEC_NAME_EMPTY: 'Spec name cannot be empty',
   SPEC_PURPOSE_EMPTY: 'Purpose section cannot be empty',
-  SPEC_NO_REQUIREMENTS: 'Spec must have at least one requirement',
+  SPEC_NO_REQUIREMENTS: 'Test spec must have at least one requirement',
   CHANGE_NAME_EMPTY: 'Change name cannot be empty',
   CHANGE_WHY_TOO_SHORT: `Why section must be at least ${MIN_WHY_SECTION_LENGTH} characters`,
   CHANGE_WHY_TOO_LONG: `Why section should not exceed ${MAX_WHY_SECTION_LENGTH} characters`,

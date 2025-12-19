@@ -42,9 +42,9 @@ describe('UpdateCommand', () => {
 
 Some existing content here.
 
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old SpecTest content
-<!-- OPENSPEC:END -->
+<!-- SPECTEST:END -->
 
 More content after.`;
     await fs.writeFile(claudePath, initialContent);
@@ -56,8 +56,8 @@ More content after.`;
 
     // Check that CLAUDE.md was updated
     const updatedContent = await fs.readFile(claudePath, 'utf-8');
-    expect(updatedContent).toContain('<!-- OPENSPEC:START -->');
-    expect(updatedContent).toContain('<!-- OPENSPEC:END -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:START -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:END -->');
     expect(updatedContent).toContain("@/spectest/AGENTS.md");
     expect(updatedContent).toContain('spectest update');
     expect(updatedContent).toContain('Some existing content here');
@@ -79,9 +79,9 @@ More content after.`;
 
 Some existing content.
 
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old SpecTest content
-<!-- OPENSPEC:END -->
+<!-- SPECTEST:END -->
 
 More notes here.`;
     await fs.writeFile(qwenPath, initialContent);
@@ -91,8 +91,8 @@ More notes here.`;
     await updateCommand.execute(testDir);
 
     const updatedContent = await fs.readFile(qwenPath, 'utf-8');
-    expect(updatedContent).toContain('<!-- OPENSPEC:START -->');
-    expect(updatedContent).toContain('<!-- OPENSPEC:END -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:START -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:END -->');
     expect(updatedContent).toContain("@/spectest/AGENTS.md");
     expect(updatedContent).toContain('spectest update');
     expect(updatedContent).toContain('Some existing content.');
@@ -118,11 +118,11 @@ More notes here.`;
 name: SpecTest: Proposal
 description: Old description
 category: SpecTest
-tags: [spectest, change]
+tags: [spectest, test-change]
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old slash content
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(proposalPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -158,9 +158,9 @@ Old slash content
     const initialContent = `description = "Implement an approved SpecTest change and keep tasks in sync."
 
 prompt = """
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->
+<!-- SPECTEST:END -->
 """
 `;
     await fs.writeFile(applyPath, initialContent);
@@ -172,7 +172,7 @@ Old body
     const updated = await fs.readFile(applyPath, 'utf-8');
     expect(updated).toContain('description = "Implement an approved SpecTest change and keep tasks in sync."');
     expect(updated).toContain('prompt = """');
-    expect(updated).toContain('<!-- OPENSPEC:START -->');
+    expect(updated).toContain('<!-- SPECTEST:START -->');
     expect(updated).toContain('Work through tasks sequentially');
     expect(updated).not.toContain('Old body');
 
@@ -200,9 +200,9 @@ Old body
       `description = "Old description"
 
 prompt = """
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old content
-<!-- OPENSPEC:END -->
+<!-- SPECTEST:END -->
 """
 `
     );
@@ -251,9 +251,9 @@ Old content
 
 Some existing Cline rules here.
 
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old SpecTest content
-<!-- OPENSPEC:END -->
+<!-- SPECTEST:END -->
 
 More rules after.`;
     await fs.writeFile(clinePath, initialContent);
@@ -265,8 +265,8 @@ More rules after.`;
 
     // Check that CLINE.md was updated
     const updatedContent = await fs.readFile(clinePath, 'utf-8');
-    expect(updatedContent).toContain('<!-- OPENSPEC:START -->');
-    expect(updatedContent).toContain('<!-- OPENSPEC:END -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:START -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:END -->');
     expect(updatedContent).toContain("@/spectest/AGENTS.md");
     expect(updatedContent).toContain('spectest update');
     expect(updatedContent).toContain('Some existing Cline rules here');
@@ -302,11 +302,11 @@ More rules after.`;
     await fs.mkdir(path.dirname(proposalPath), { recursive: true });
     const initialContent = `# SpecTest: Proposal
 
-Scaffold a new SpecTest change and validate strictly.
+Scaffold a new SpecTest test change and validate strictly.
 
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old slash content
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(proposalPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -342,9 +342,9 @@ id: spectest-apply
 category: SpecTest
 description: Old description
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(cursorPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -380,9 +380,9 @@ id: spectest-apply
 category: SpecTest
 description: Old description
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(openCodePath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -412,9 +412,9 @@ Old body
       '.kilocode/workflows/spectest-apply.md'
     );
     await fs.mkdir(path.dirname(kilocodePath), { recursive: true });
-    const initialContent = `<!-- OPENSPEC:START -->
+    const initialContent = `<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(kilocodePath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -424,7 +424,7 @@ Old body
     const updated = await fs.readFile(kilocodePath, 'utf-8');
     expect(updated).toContain('Work through tasks sequentially');
     expect(updated).not.toContain('Old body');
-    expect(updated.startsWith('<!-- OPENSPEC:START -->')).toBe(true);
+    expect(updated.startsWith('<!-- SPECTEST:START -->')).toBe(true);
 
     const [logMessage] = consoleSpy.mock.calls[0];
     expect(logMessage).toContain(
@@ -442,9 +442,9 @@ Old body
     await fs.mkdir(path.dirname(wsPath), { recursive: true });
     const initialContent = `## SpecTest: Apply (Windsurf)
 Intro
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(wsPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -473,9 +473,9 @@ Old body
 description: Implement an approved SpecTest change and keep tasks in sync.
 ---
 
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(agPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -485,7 +485,7 @@ Old body
     const updated = await fs.readFile(agPath, 'utf-8');
     expect(updated).toContain('Work through tasks sequentially');
     expect(updated).not.toContain('Old body');
-    expect(updated).toContain('description: Implement an approved SpecTest change and keep tasks in sync.');
+    expect(updated).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
     expect(updated).not.toContain('auto_execution_mode: 3');
 
     const [logMessage] = consoleSpy.mock.calls[0];
@@ -501,7 +501,7 @@ Old body
       '.codex/prompts/spectest-apply.md'
     );
     await fs.mkdir(path.dirname(codexPath), { recursive: true });
-    const initialContent = `---\ndescription: Old description\nargument-hint: old-hint\n---\n\n$ARGUMENTS\n<!-- OPENSPEC:START -->\nOld body\n<!-- OPENSPEC:END -->`;
+    const initialContent = `---\ndescription: Old description\nargument-hint: old-hint\n---\n\n$ARGUMENTS\n<!-- SPECTEST:START -->\nOld body\n<!-- SPECTEST:END -->`;
     await fs.writeFile(codexPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -509,7 +509,7 @@ Old body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(codexPath, 'utf-8');
-    expect(updated).toContain('description: Implement an approved SpecTest change and keep tasks in sync.');
+    expect(updated).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
     expect(updated).toContain('argument-hint: change-id');
     expect(updated).toContain('$ARGUMENTS');
     expect(updated).toContain('Work through tasks sequentially');
@@ -534,7 +534,7 @@ Old body
     await fs.mkdir(path.dirname(codexApply), { recursive: true });
     await fs.writeFile(
       codexApply,
-      '---\ndescription: Old\nargument-hint: old\n---\n\n$ARGUMENTS\n<!-- OPENSPEC:START -->\nOld\n<!-- OPENSPEC:END -->'
+      '---\ndescription: Old\nargument-hint: old\n---\n\n$ARGUMENTS\n<!-- SPECTEST:START -->\nOld\n<!-- SPECTEST:END -->'
     );
 
     await updateCommand.execute(testDir);
@@ -564,9 +564,9 @@ description: Implement an approved SpecTest change and keep tasks in sync.
 ---
 
 $ARGUMENTS
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(ghPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -574,7 +574,7 @@ Old body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(ghPath, 'utf-8');
-    expect(updated).toContain('description: Implement an approved SpecTest change and keep tasks in sync.');
+    expect(updated).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
     expect(updated).toContain('$ARGUMENTS');
     expect(updated).toContain('Work through tasks sequentially');
     expect(updated).not.toContain('Old body');
@@ -597,7 +597,7 @@ Old body
     await fs.mkdir(path.dirname(ghApply), { recursive: true });
     await fs.writeFile(
       ghApply,
-      '---\ndescription: Old\n---\n\n$ARGUMENTS\n<!-- OPENSPEC:START -->\nOld\n<!-- OPENSPEC:END -->'
+      '---\ndescription: Old\n---\n\n$ARGUMENTS\n<!-- SPECTEST:START -->\nOld\n<!-- SPECTEST:END -->'
     );
 
     await updateCommand.execute(testDir);
@@ -622,12 +622,12 @@ Old body
       '.gemini/commands/spectest/proposal.toml'
     );
     await fs.mkdir(path.dirname(geminiProposal), { recursive: true });
-    const initialContent = `description = "Scaffold a new SpecTest change and validate strictly."
+    const initialContent = `description = "Scaffold a new SpecTest test change and validate strictly."
 
 prompt = """
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old Gemini body
-<!-- OPENSPEC:END -->
+<!-- SPECTEST:END -->
 """
 `;
     await fs.writeFile(geminiProposal, initialContent);
@@ -637,11 +637,11 @@ Old Gemini body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(geminiProposal, 'utf-8');
-    expect(updated).toContain('description = "Scaffold a new SpecTest change and validate strictly."');
+    expect(updated).toContain('description = "Scaffold a new SpecTest test change and validate strictly."');
     expect(updated).toContain('prompt = """');
-    expect(updated).toContain('<!-- OPENSPEC:START -->');
+    expect(updated).toContain('<!-- SPECTEST:START -->');
     expect(updated).toContain('**Guardrails**');
-    expect(updated).toContain('<!-- OPENSPEC:END -->');
+    expect(updated).toContain('<!-- SPECTEST:END -->');
     expect(updated).not.toContain('Old Gemini body');
 
     const geminiApply = path.join(
@@ -670,12 +670,12 @@ Old Gemini body
       '.iflow/commands/spectest-proposal.md'
     );
     await fs.mkdir(path.dirname(iflowProposal), { recursive: true });
-    const initialContent = `description: Scaffold a new SpecTest change and validate strictly."
+    const initialContent = `description: Scaffold a new SpecTest test change and validate strictly."
 
 prompt = """
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old IFlow body
-<!-- OPENSPEC:END -->
+<!-- SPECTEST:END -->
 """
 `;
     await fs.writeFile(iflowProposal, initialContent);
@@ -685,10 +685,10 @@ Old IFlow body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(iflowProposal, 'utf-8');
-    expect(updated).toContain('description: Scaffold a new SpecTest change and validate strictly.');
-    expect(updated).toContain('<!-- OPENSPEC:START -->');
+    expect(updated).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
+    expect(updated).toContain('<!-- SPECTEST:START -->');
     expect(updated).toContain('**Guardrails**');
-    expect(updated).toContain('<!-- OPENSPEC:END -->');
+    expect(updated).toContain('<!-- SPECTEST:END -->');
     expect(updated).not.toContain('Old IFlow body');
 
     const iflowApply = path.join(
@@ -718,13 +718,13 @@ Old IFlow body
     );
     await fs.mkdir(path.dirname(factoryPath), { recursive: true });
     const initialContent = `---
-description: Scaffold a new SpecTest change and validate strictly.
+description: Scaffold a new SpecTest test change and validate strictly.
 argument-hint: request or feature description
 ---
 
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(factoryPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -732,10 +732,10 @@ Old body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(factoryPath, 'utf-8');
-    expect(updated).toContain('description: Scaffold a new SpecTest change and validate strictly.');
+    expect(updated).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
     expect(updated).toContain('argument-hint: request or feature description');
     expect(
-      /<!-- OPENSPEC:START -->([\s\S]*?)<!-- OPENSPEC:END -->/u.exec(updated)?.[1]
+      /<!-- SPECTEST:START -->([\s\S]*?)<!-- SPECTEST:END -->/u.exec(updated)?.[1]
     ).toContain('$ARGUMENTS');
     expect(updated).toContain('**Guardrails**');
     expect(updated).not.toContain('Old body');
@@ -761,9 +761,9 @@ description: Old
 argument-hint: old
 ---
 
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`
+<!-- SPECTEST:END -->`
     );
 
     await updateCommand.execute(testDir);
@@ -796,9 +796,9 @@ The user wants to apply the following change. Use the spectest instructions to i
 <ChangeId>
   $ARGUMENTS
 </ChangeId>
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(aqPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -807,8 +807,8 @@ Old body
 
     const updatedContent = await fs.readFile(aqPath, 'utf-8');
     expect(updatedContent).toContain('**Guardrails**');
-    expect(updatedContent).toContain('<!-- OPENSPEC:START -->');
-    expect(updatedContent).toContain('<!-- OPENSPEC:END -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:START -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:END -->');
     expect(updatedContent).not.toContain('Old body');
 
     expect(consoleSpy).toHaveBeenCalledWith(
@@ -828,7 +828,7 @@ Old body
     await fs.mkdir(path.dirname(aqApply), { recursive: true });
     await fs.writeFile(
       aqApply,
-      '---\ndescription: Old\n---\n\nThe user wants to apply the following change.\n\n<ChangeId>\n  $ARGUMENTS\n</ChangeId>\n<!-- OPENSPEC:START -->\nOld\n<!-- OPENSPEC:END -->'
+      '---\ndescription: Old\n---\n\nThe user wants to apply the following change.\n\n<ChangeId>\n  $ARGUMENTS\n</ChangeId>\n<!-- SPECTEST:START -->\nOld\n<!-- SPECTEST:END -->'
     );
 
     await updateCommand.execute(testDir);
@@ -857,9 +857,9 @@ Old body
 description: Implement an approved SpecTest change and keep tasks in sync.
 argument-hint: change-id
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(auggiePath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -868,8 +868,8 @@ Old body
 
     const updatedContent = await fs.readFile(auggiePath, 'utf-8');
     expect(updatedContent).toContain('**Guardrails**');
-    expect(updatedContent).toContain('<!-- OPENSPEC:START -->');
-    expect(updatedContent).toContain('<!-- OPENSPEC:END -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:START -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:END -->');
     expect(updatedContent).not.toContain('Old body');
 
     expect(consoleSpy).toHaveBeenCalledWith(
@@ -889,7 +889,7 @@ Old body
     await fs.mkdir(path.dirname(auggieApply), { recursive: true });
     await fs.writeFile(
       auggieApply,
-      '---\ndescription: Old\nargument-hint: old\n---\n<!-- OPENSPEC:START -->\nOld\n<!-- OPENSPEC:END -->'
+      '---\ndescription: Old\nargument-hint: old\n---\n<!-- SPECTEST:START -->\nOld\n<!-- SPECTEST:END -->'
     );
 
     await updateCommand.execute(testDir);
@@ -918,11 +918,11 @@ Old body
 name: SpecTest: Proposal
 description: Old description
 category: SpecTest
-tags: [spectest, change]
+tags: [spectest, test-change]
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old slash content
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(codeBuddyPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -965,9 +965,9 @@ description: Old description
 category: SpecTest
 tags: [spectest, apply]
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`
+<!-- SPECTEST:END -->`
     );
 
     await updateCommand.execute(testDir);
@@ -996,11 +996,11 @@ Old body
 name: SpecTest: Proposal
 description: Old description
 category: SpecTest
-tags: [spectest, change]
+tags: [spectest, test-change]
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old slash content
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(crushPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -1043,9 +1043,9 @@ description: Old description
 category: SpecTest
 tags: [spectest, apply]
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`
+<!-- SPECTEST:END -->`
     );
 
     await updateCommand.execute(testDir);
@@ -1074,9 +1074,9 @@ Old body
 description: "Old description"
 argument-hint: old-hint
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(costrictPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -1115,11 +1115,11 @@ Old body
 name: SpecTest: Proposal
 description: Old description
 category: SpecTest
-tags: [spectest, change]
+tags: [spectest, test-change]
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old slash content
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(qoderPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -1156,9 +1156,9 @@ Old slash content
 
 Old description
 
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`;
+<!-- SPECTEST:END -->`;
     await fs.writeFile(rooPath, initialContent);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -1198,9 +1198,9 @@ Old body
       rooApply,
       `# SpecTest: Apply
 
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`
+<!-- SPECTEST:END -->`
     );
 
     await updateCommand.execute(testDir);
@@ -1233,9 +1233,9 @@ Old body
 description: "Old"
 argument-hint: old
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old
-<!-- OPENSPEC:END -->`
+<!-- SPECTEST:END -->`
     );
 
     await updateCommand.execute(testDir);
@@ -1270,9 +1270,9 @@ description: Old description
 category: SpecTest
 tags: [spectest, apply]
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old body
-<!-- OPENSPEC:END -->`
+<!-- SPECTEST:END -->`
     );
 
     await updateCommand.execute(testDir);
@@ -1298,9 +1298,9 @@ Old body
 
 Some existing CoStrict instructions here.
 
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old SpecTest content
-<!-- OPENSPEC:END -->
+<!-- SPECTEST:END -->
 
 More instructions after.`;
     await fs.writeFile(costrictPath, initialContent);
@@ -1312,8 +1312,8 @@ More instructions after.`;
 
     // Check that COSTRICT.md was updated
     const updatedContent = await fs.readFile(costrictPath, 'utf-8');
-    expect(updatedContent).toContain('<!-- OPENSPEC:START -->');
-    expect(updatedContent).toContain('<!-- OPENSPEC:END -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:START -->');
+    expect(updatedContent).toContain('<!-- SPECTEST:END -->');
     expect(updatedContent).toContain("@/spectest/AGENTS.md");
     expect(updatedContent).toContain('spectest update');
     expect(updatedContent).toContain('Some existing CoStrict instructions here');
@@ -1348,7 +1348,7 @@ More instructions after.`;
       '.cospec/spectest/commands/spectest-proposal.md'
     );
     await fs.mkdir(path.dirname(costrictPath), { recursive: true });
-    const initialContent = `## Custom Intro Title\nSome intro text\n<!-- OPENSPEC:START -->\nOld body\n<!-- OPENSPEC:END -->\n\nFooter stays`;
+    const initialContent = `## Custom Intro Title\nSome intro text\n<!-- SPECTEST:START -->\nOld body\n<!-- SPECTEST:END -->\n\nFooter stays`;
     await fs.writeFile(costrictPath, initialContent);
 
     await updateCommand.execute(testDir);
@@ -1365,7 +1365,7 @@ More instructions after.`;
     const costrictPath = path.join(testDir, 'COSTRICT.md');
     await fs.writeFile(
       costrictPath,
-      '<!-- OPENSPEC:START -->\nOld\n<!-- OPENSPEC:END -->'
+      '<!-- SPECTEST:START -->\nOld\n<!-- SPECTEST:END -->'
     );
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -1404,7 +1404,7 @@ More instructions after.`;
       '.windsurf/workflows/spectest-proposal.md'
     );
     await fs.mkdir(path.dirname(wsPath), { recursive: true });
-    const initialContent = `## Custom Intro Title\nSome intro text\n<!-- OPENSPEC:START -->\nOld body\n<!-- OPENSPEC:END -->\n\nFooter stays`;
+    const initialContent = `## Custom Intro Title\nSome intro text\n<!-- SPECTEST:START -->\nOld body\n<!-- SPECTEST:END -->\n\nFooter stays`;
     await fs.writeFile(wsPath, initialContent);
 
     await updateCommand.execute(testDir);
@@ -1425,7 +1425,7 @@ More instructions after.`;
     await fs.mkdir(path.dirname(wsApply), { recursive: true });
     await fs.writeFile(
       wsApply,
-      '<!-- OPENSPEC:START -->\nOld\n<!-- OPENSPEC:END -->'
+      '<!-- SPECTEST:START -->\nOld\n<!-- SPECTEST:END -->'
     );
 
     await updateCommand.execute(testDir);
@@ -1467,7 +1467,7 @@ More instructions after.`;
     await fs.mkdir(path.dirname(claudePath), { recursive: true });
     await fs.writeFile(
       claudePath,
-      '<!-- OPENSPEC:START -->\nOld\n<!-- OPENSPEC:END -->'
+      '<!-- SPECTEST:START -->\nOld\n<!-- SPECTEST:END -->'
     );
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -1495,11 +1495,11 @@ More instructions after.`;
 name: SpecTest: Proposal
 description: Existing file
 category: SpecTest
-tags: [spectest, change]
+tags: [spectest, test-change]
 ---
-<!-- OPENSPEC:START -->
+<!-- SPECTEST:START -->
 Old content
-<!-- OPENSPEC:END -->`
+<!-- SPECTEST:END -->`
     );
 
     await updateCommand.execute(testDir);
@@ -1555,15 +1555,15 @@ Old content
     expect(exists).toBe(true);
 
     const content = await fs.readFile(rootAgentsPath, 'utf-8');
-    expect(content).toContain('<!-- OPENSPEC:START -->');
+    expect(content).toContain('<!-- SPECTEST:START -->');
     expect(content).toContain("@/spectest/AGENTS.md");
     expect(content).toContain('spectest update');
-    expect(content).toContain('<!-- OPENSPEC:END -->');
+    expect(content).toContain('<!-- SPECTEST:END -->');
   });
 
   it('should refresh root AGENTS.md while preserving surrounding content', async () => {
     const rootAgentsPath = path.join(testDir, 'AGENTS.md');
-    const original = `# Custom intro\n\n<!-- OPENSPEC:START -->\nOld content\n<!-- OPENSPEC:END -->\n\n# Footnotes`;
+    const original = `# Custom intro\n\n<!-- SPECTEST:START -->\nOld content\n<!-- SPECTEST:END -->\n\n# Footnotes`;
     await fs.writeFile(rootAgentsPath, original);
 
     const consoleSpy = vi.spyOn(console, 'log');
@@ -1604,7 +1604,7 @@ Old content
     const claudePath = path.join(testDir, 'CLAUDE.md');
     await fs.writeFile(
       claudePath,
-      '<!-- OPENSPEC:START -->\nOld\n<!-- OPENSPEC:END -->'
+      '<!-- SPECTEST:START -->\nOld\n<!-- SPECTEST:END -->'
     );
     await fs.chmod(claudePath, 0o444); // Read-only
 

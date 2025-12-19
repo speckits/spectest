@@ -43,7 +43,7 @@ There are changes proposed, but no delta specs provided yet.`;
     const report = await validator.validateSpec(specPath);
     expect(report.valid).toBe(false);
     const msg = report.issues.map(i => i.message).join('\n');
-    expect(msg).toContain('Spec must have a Purpose section');
+    expect(msg).toContain('Test spec must have a Purpose section');
     expect(msg).toContain('Expected headers: "## Purpose" and "## Requirements"');
   });
 

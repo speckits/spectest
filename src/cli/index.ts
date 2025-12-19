@@ -17,10 +17,12 @@ import { CompletionCommand } from '../commands/completion.js';
 
 const program = new Command();
 const require = createRequire(import.meta.url);
+const packageJson = require('../../package.json');
 
 program
   .name('spectest')
-  .description('Spec-first Playwright test automation framework with AI-powered test generation');
+  .description('Spec-first Playwright test automation framework with AI-powered test generation')
+  .version(packageJson?.version ?? '0.0.0');
 
 // Global options
 program.option('--no-color', 'Disable color output');

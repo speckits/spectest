@@ -349,7 +349,7 @@ export class Validator {
     if (msg === VALIDATION_MESSAGES.CHANGE_NO_DELTAS) {
       return `${msg}. ${VALIDATION_MESSAGES.GUIDE_NO_DELTAS}`;
     }
-    if (msg.includes('Spec must have a Purpose section') || msg.includes('Spec must have a Requirements section')) {
+    if (msg.includes('Test spec must have a Purpose section') || msg.includes('Test spec must have a Requirements section')) {
       return `${msg}. ${VALIDATION_MESSAGES.GUIDE_MISSING_SPEC_SECTIONS}`;
     }
     if (msg.includes('Change must have a Why section') || msg.includes('Change must have a What Changes section')) {
