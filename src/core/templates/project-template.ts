@@ -23,6 +23,10 @@ ${context.techStack?.length ? context.techStack.map(tech => `- ${tech}`).join('\
 
 ### Testing Strategy
 [Explain your testing approach and requirements]
+- Test automation framework: Playwright
+- Test spec format: SpecTest (human-readable test specs)
+- Test generation: Use Playwright Test Agents (planner, generator, healer)
+- Test maintenance: Automated healing for failing tests
 
 ### Git Workflow
 [Describe your branching strategy and commit conventions]

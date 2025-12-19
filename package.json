@@ -1,20 +1,21 @@
 {
   "name": "@speckit/spectest",
   "version": "0.1.0",
-  "description": "AI-native system for spec-driven automation test development with Playwright",
+  "description": "Spec-first Playwright test automation framework with AI-powered test generation",
   "keywords": [
     "spectest",
-    "specs",
+    "playwright",
+    "test-automation",
+    "spec-driven",
+    "test-specs",
     "cli",
     "ai",
-    "testing",
-    "automation",
-    "playwright"
+    "testing"
   ],
-  "homepage": "https://github.com/speckit/spectest",
+  "homepage": "https://github.com/speckits/spectest",
   "repository": {
     "type": "git",
-    "url": "https://github.com/speckit/spectest"
+    "url": "https://github.com/speckits/spectest"
   },
   "license": "MIT",
   "author": "SpecTest Contributors",

@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   prepare:
-    if: github.repository == 'speckit/spectest'
+    if: github.repository == 'speckits/spectest'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

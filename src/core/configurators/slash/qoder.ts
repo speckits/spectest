@@ -7,13 +7,13 @@ import { SlashCommandId } from '../../templates/index.js';
  * Commands are stored in .qoder/commands/spectest/ directory
  */
 const FILE_PATHS: Record<SlashCommandId, string> = {
-  // Create and validate new change proposals
+  // Create and validate new test change proposals
   proposal: '.qoder/commands/spectest/proposal.md',
   
-  // Implement approved changes with task tracking
+  // Implement approved test changes with task tracking
   apply: '.qoder/commands/spectest/apply.md',
   
-  // Archive completed changes and update specs
+  // Archive completed test changes and update test specs
   archive: '.qoder/commands/spectest/archive.md'
 };
 
@@ -25,19 +25,19 @@ const FILE_PATHS: Record<SlashCommandId, string> = {
 const FRONTMATTER: Record<SlashCommandId, string> = {
   proposal: `---
 name: SpecTest: Proposal
-description: Scaffold a new SpecTest change and validate strictly.
+description: Scaffold a new SpecTest test change and validate strictly.
 category: SpecTest
-tags: [spectest, change]
+tags: [spectest, test-change]
 ---`,
   apply: `---
 name: SpecTest: Apply
-description: Implement an approved SpecTest change and keep tasks in sync.
+description: Implement an approved SpecTest test change and keep tasks in sync.
 category: SpecTest
 tags: [spectest, apply]
 ---`,
   archive: `---
 name: SpecTest: Archive
-description: Archive a deployed SpecTest change and update specs.
+description: Archive a deployed SpecTest test change and update test specs.
 category: SpecTest
 tags: [spectest, archive]
 ---`

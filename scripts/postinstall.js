@@ -5,7 +5,7 @@
  *
  * This script runs automatically after npm install unless:
  * - CI=true environment variable is set
- * - SPECTEST_NO_COMPLETIONS=1 environment variable is set
+ * - OPENSPEC_NO_COMPLETIONS=1 environment variable is set
  * - dist/ directory doesn't exist (dev setup scenario)
  *
  * The script never fails npm install - all errors are caught and handled gracefully.
@@ -28,8 +28,8 @@ function shouldSkipInstallation() {
   }
 
   // Skip if user opted out
-  if (process.env.SPECTEST_NO_COMPLETIONS === '1') {
-    return { skip: true, reason: 'SPECTEST_NO_COMPLETIONS=1 set' };
+  if (process.env.OPENSPEC_NO_COMPLETIONS === '1') {
+    return { skip: true, reason: 'OPENSPEC_NO_COMPLETIONS=1 set' };
   }
 
   return { skip: false };

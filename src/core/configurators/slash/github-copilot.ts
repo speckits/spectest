@@ -9,17 +9,17 @@ const FILE_PATHS: Record<SlashCommandId, string> = {
 
 const FRONTMATTER: Record<SlashCommandId, string> = {
   proposal: `---
-description: Scaffold a new SpecTest change and validate strictly.
+description: Scaffold a new SpecTest test change and validate strictly.
 ---
 
 $ARGUMENTS`,
   apply: `---
-description: Implement an approved SpecTest change and keep tasks in sync.
+description: Implement an approved SpecTest test change and keep tasks in sync.
 ---
 
 $ARGUMENTS`,
   archive: `---
-description: Archive a deployed SpecTest change and update specs.
+description: Archive a deployed SpecTest test change and update test specs.
 ---
 
 $ARGUMENTS`

@@ -31,11 +31,12 @@ const PROGRESS_SPINNER = {
 };
 
 const LETTER_MAP: Record<string, string[]> = {
-  S: [' █████', '██    ', ' ████ ', '    ██', '█████ '],
+  O: [' ████ ', '██  ██', '██  ██', '██  ██', ' ████ '],
   P: ['█████ ', '██  ██', '█████ ', '██    ', '██    '],
   E: ['██████', '██    ', '█████ ', '██    ', '██████'],
+  N: ['██  ██', '███ ██', '██ ███', '██  ██', '██  ██'],
+  S: [' █████', '██    ', ' ████ ', '    ██', '█████ '],
   C: [' █████', '██    ', '██    ', '██    ', ' █████'],
-  T: ['██████', '  ██  ', '  ██  ', '  ██  ', '  ██  '],
   ' ': ['  ', '  ', '  ', '  ', '  '],
 };
 
@@ -784,6 +785,7 @@ export class InitCommand {
     return rootStubStatus;
   }
 
+
   private async configureRootAgentsStub(
     projectPath: string,
     spectestDir: string
@@ -885,7 +887,7 @@ export class InitCommand {
     console.log(
       chalk.gray('────────────────────────────────────────────────────────────')
     );
-    console.log(PALETTE.white('1. Populate your test project context:'));
+    console.log(PALETTE.white('1. Populate your project context:'));
     console.log(
       PALETTE.lightGray(
         '   "Please read spectest/project.md and help me fill it out'
@@ -893,17 +895,17 @@ export class InitCommand {
     );
     console.log(
       PALETTE.lightGray(
-        '    with details about my test project, test tech stack, and test conventions"\n'
+        '    with details about my project, tech stack, and conventions"\n'
       )
     );
-    console.log(PALETTE.white('2. Create your first test change proposal:'));
+    console.log(PALETTE.white('2. Create your first change proposal:'));
     console.log(
       PALETTE.lightGray(
-        '   "I want to add [YOUR TEST SCENARIO HERE]. Please create an'
+        '   "I want to add [YOUR FEATURE HERE]. Please create an'
       )
     );
     console.log(
-      PALETTE.lightGray('    SpecTest change proposal for this test scenario"\n')
+      PALETTE.lightGray('    SpecTest test change proposal for this feature"\n')
     );
     console.log(PALETTE.white('3. Learn the SpecTest workflow:'));
     console.log(
@@ -912,7 +914,7 @@ export class InitCommand {
       )
     );
     console.log(
-      PALETTE.lightGray('    and how I should work with you on this test project"')
+      PALETTE.lightGray('    and how I should work with you on this project"')
     );
     console.log(
       PALETTE.darkGray(

@@ -1,92 +1,94 @@
 export const agentsTemplate = `# SpecTest Instructions
 
-Instructions for AI coding assistants using SpecTest for spec-driven automation test development.
+Instructions for AI coding assistants using SpecTest for spec-first Playwright test automation.
 
 ## TL;DR Quick Checklist
 
 - Search existing work: \`spectest spec list --long\`, \`spectest list\` (use \`rg\` only for full-text search)
 - Decide scope: new test capability vs modify existing test capability
 - Pick a unique \`change-id\`: kebab-case, verb-led (\`add-\`, \`update-\`, \`remove-\`, \`refactor-\`)
-- Scaffold: \`proposal.md\`, \`tasks.md\`, \`design.md\` (only if needed), and delta specs per affected test capability
-- Write deltas: use \`## ADDED|MODIFIED|REMOVED|RENAMED Requirements\`; include at least one \`#### Scenario:\` per test requirement
+- Scaffold: \`proposal.md\`, \`tasks.md\`, \`design.md\` (only if needed), and delta test specs per affected test capability
+- Write deltas: use \`## ADDED|MODIFIED|REMOVED|RENAMED Requirements\`; include at least one \`#### Scenario:\` per requirement describing test steps (WHEN) and expected outcomes (THEN)
 - Validate: \`spectest validate [change-id] --strict\` and fix issues
-- Request approval: Do not start test implementation until proposal is approved
+- Request approval: Do not start implementation until test change proposal is approved
 
 ## Three-Stage Workflow
 
-### Stage 1: Creating Changes
-Create proposal when you need to:
-- Add test coverage for features or functionality
-- Create test plans for new or existing features
-- Improve test suite (add scenarios, fix gaps)
-- Make breaking changes to test infrastructure
-- Change test architecture or patterns
+### Stage 1: Creating Test Changes
+Create test change proposal when you need to:
+- Add new test scenarios or test capabilities
+- Modify existing test behavior or coverage
+- Change test architecture or patterns  
+- Update test automation workflows
+- Integrate with Playwright Test Agents
 
 Triggers (examples):
-- "Help me create a test plan"
-- "Create test coverage for [feature]"
-- "Generate tests for [scenario]"
-- "Add test scenarios"
 - "Help me create a change proposal"
+- "Help me plan a change"
+- "Help me create a proposal"
+- "I want to create a spec proposal"
+- "I want to create a spec"
 
 Loose matching guidance:
-- Contains one of: \`proposal\`, \`change\`, \`spec\`, \`test plan\`, \`test coverage\`
-- With one of: \`create\`, \`plan\`, \`make\`, \`start\`, \`help\`, \`generate\`, \`add\`
+- Contains one of: \`proposal\`, \`change\`, \`spec\`
+- With one of: \`create\`, \`plan\`, \`make\`, \`start\`, \`help\`
 
 Skip proposal for:
-- Bug fixes (restore intended test behavior)
+- Bug fixes (restore intended behavior)
 - Typos, formatting, comments
 - Dependency updates (non-breaking)
 - Configuration changes
+- Tests for existing behavior
 
 **Workflow**
-1. Review \`spectest/project.md\`, \`spectest list\`, and \`spectest list --specs\` to understand current test coverage.
-2. Choose a unique verb-led \`change-id\` (e.g., \`add-login-tests\`) and scaffold \`proposal.md\`, \`tasks.md\`, optional \`design.md\`, and spec deltas under \`spectest/changes/<id>/\`.
-3. Draft spec deltas using \`## ADDED|MODIFIED|REMOVED Requirements\` with at least one \`#### Scenario:\` per test requirement. Focus on test coverage requirements and test scenarios.
-4. Run \`spectest validate <id> --strict\` and resolve any issues before sharing the proposal.
+1. Review \`spectest/project.md\`, \`spectest list\`, and \`spectest list --specs\` to understand current test context.
+2. Choose a unique verb-led \`change-id\` and scaffold \`proposal.md\`, \`tasks.md\`, optional \`design.md\`, and test spec deltas under \`spectest/changes/<id>/\`.
+3. Draft test spec deltas using \`## ADDED|MODIFIED|REMOVED Requirements\` with at least one \`#### Scenario:\` per requirement describing test steps (WHEN) and expected outcomes (THEN).
+4. Run \`spectest validate <id> --strict\` and resolve any issues before sharing the test change proposal.
 
-### Stage 2: Implementing Changes
+### Stage 2: Implementing Test Changes
 Track these steps as TODOs and complete them one by one.
-1. **Read proposal.md** - Understand what test coverage is being added
-2. **Read design.md** (if exists) - Review test strategy decisions
+1. **Read proposal.md** - Understand what test changes are being implemented
+2. **Read design.md** (if exists) - Review technical decisions for test automation
 3. **Read tasks.md** - Get test implementation checklist
-4. **Implement tasks sequentially** - Complete in order:
-   - **Test Planning**: Use the test planning workflow to explore the application under test and create test plans
-   - **Test Generation**: Use the test generation workflow to create Playwright tests from test plans
-   - **Test Healing**: Use the test healing workflow to fix any failing tests
-5. **Confirm completion** - Ensure every item in \`tasks.md\` is finished and all tests pass before updating statuses
-6. **Update checklist** - After all work is done, set every task to \`- [x]\` so the list reflects reality
-7. **Approval gate** - Do not start test implementation until the proposal is reviewed and approved
+4. **Implement tasks sequentially** - Complete in order (may include generating test plans, test code, or manual test implementation)
+5. **After implementing test changes, run tests with report and screenshot generation**:
+   - Run \`npm test\` (or \`pnpm test\` / \`yarn test\` depending on package manager)
+   - Tests will automatically generate HTML report in \`playwright-report/\` directory
+   - Screenshots will be captured on test failures in \`test-results/\` directory
+   - Review the HTML report at \`playwright-report/index.html\` to verify test results
+6. **Confirm completion** - Ensure every item in \`tasks.md\` is finished before updating statuses
+7. **Update checklist** - After all work is done, set every task to \`- [x]\` so the list reflects reality
+8. **Approval gate** - Do not start implementation until the test change proposal is reviewed and approved
 
-### Stage 3: Archiving Changes
-After test implementation is complete and all tests pass, create separate PR to:
+### Stage 3: Archiving Test Changes
+After test implementation is complete, create separate PR to:
 - Move \`changes/[name]/\` → \`changes/archive/YYYY-MM-DD-[name]/\`
 - Update \`specs/\` if test capabilities changed
 - Use \`spectest archive <change-id> --skip-specs --yes\` for tooling-only changes (always pass the change ID explicitly)
-- Run \`spectest validate --strict\` to confirm the archived change passes checks
+- Run \`spectest validate --strict\` to confirm the archived test change passes checks
 
 ## Before Any Task
 
 **Context Checklist:**
-- [ ] Read relevant test specs in \`specs/[test-capability]/spec.md\`
-- [ ] Check pending test changes in \`changes/\` for conflicts
-- [ ] Read \`spectest/project.md\` for test conventions
-- [ ] Run \`spectest list\` to see active test changes
-- [ ] Run \`spectest list --specs\` to see existing test capabilities
-- [ ] Review existing test files in \`tests/\` directory to understand current test coverage
+- [ ] Read relevant specs in \`specs/[capability]/spec.md\`
+- [ ] Check pending changes in \`changes/\` for conflicts
+- [ ] Read \`spectest/project.md\` for conventions
+- [ ] Run \`spectest list\` to see active changes
+- [ ] Run \`spectest list --specs\` to see existing capabilities
 
-**Before Creating Test Specs:**
-- Always check if test capability already exists
-- Prefer modifying existing test specs over creating duplicates
-- Use \`spectest show [spec]\` to review current test coverage
-- If request is ambiguous, ask 1–2 clarifying questions about test scenarios before scaffolding
+**Before Creating Specs:**
+- Always check if capability already exists
+- Prefer modifying existing specs over creating duplicates
+- Use \`spectest show [spec]\` to review current state
+- If request is ambiguous, ask 1–2 clarifying questions before scaffolding
 
 ### Search Guidance
-- Enumerate specs: \`spectest spec list --long\` (or \`--json\` for scripts)
-- Enumerate changes: \`spectest list\` (or \`spectest change list --json\` - deprecated but available)
+- Enumerate test specs: \`spectest spec list --long\` (or \`--json\` for scripts)
+- Enumerate test changes: \`spectest list\` (or \`spectest change list --json\` - deprecated but available)
 - Show details:
-  - Spec: \`spectest show <spec-id> --type spec\` (use \`--json\` for filters)
-  - Change: \`spectest show <change-id> --json --deltas-only\`
+  - Test Spec: \`spectest show <spec-id> --type spec\` (use \`--json\` for filters)
+  - Test Change: \`spectest show <change-id> --json --deltas-only\`
 - Full-text search (use ripgrep): \`rg -n "Requirement:|Scenario:" spectest/specs\`
 
 ## Quick Start
@@ -95,15 +97,21 @@ After test implementation is complete and all tests pass, create separate PR to:
 
 \`\`\`bash
 # Essential commands
-spectest list                  # List active changes
-spectest list --specs          # List specifications
-spectest show [item]           # Display change or spec
-spectest validate [item]       # Validate changes or specs
-spectest archive <change-id> [--yes|-y]   # Archive after all tests pass (add --yes for non-interactive runs)
+spectest list                  # List active test changes
+spectest list --specs          # List test specifications
+spectest show [item]           # Display test change or test spec
+spectest validate [item]       # Validate test changes or test specs
+spectest archive <change-id> [--yes|-y]   # Archive after test implementation (add --yes for non-interactive runs)
 
 # Project management
 spectest init [path]           # Initialize SpecTest
+spectest init-playwright       # Scaffold Playwright configuration
 spectest update [path]         # Update instruction files
+
+# Playwright integration
+spectest plan <spec-id>        # Generate test plan from test spec (Playwright planner)
+spectest generate <plan-file>  # Generate Playwright tests from test plan (Playwright generator)
+spectest heal                  # Heal failing tests (Playwright healer)
 
 # Interactive mode
 spectest show                  # Prompts for selection
@@ -128,18 +136,18 @@ spectest validate [change] --strict
 \`\`\`
 spectest/
 ├── project.md              # Project conventions
-├── specs/                  # Current truth - what tests ARE written
-│   └── [test-capability]/  # Single focused test capability
-│       ├── spec.md         # Test requirements and scenarios
-│       └── design.md       # Test strategy patterns
-├── changes/                # Test proposals - what tests SHOULD be added/updated
+├── specs/                  # Current truth - what IS built
+│   └── [capability]/       # Single focused capability
+│       ├── spec.md         # Requirements and scenarios
+│       └── design.md       # Technical patterns
+├── changes/                # Proposals - what SHOULD change
 │   ├── [change-name]/
 │   │   ├── proposal.md     # Why, what, impact
-│   │   ├── tasks.md        # Test implementation checklist
-│   │   ├── design.md       # Test strategy decisions (optional; see criteria)
-│   │   └── specs/          # Test delta changes
-│   │       └── [test-capability]/
-│   │           └── spec.md # ADDED/MODIFIED/REMOVED test requirements
+│   │   ├── tasks.md        # Implementation checklist
+│   │   ├── design.md       # Technical decisions (optional; see criteria)
+│   │   └── specs/          # Delta changes
+│   │       └── [capability]/
+│   │           └── spec.md # ADDED/MODIFIED/REMOVED
 │   └── archive/            # Completed changes
 \`\`\`
 
@@ -148,12 +156,12 @@ spectest/
 ### Decision Tree
 
 \`\`\`
-New test request?
-├─ Bug fix restoring intended test behavior? → Fix directly
-├─ Typo/format/comment in test files? → Fix directly  
-├─ Add test coverage for feature? → Create proposal
-├─ Improve test suite? → Create proposal
-├─ Update test infrastructure? → Create proposal
+New request?
+├─ Bug fix restoring spec behavior? → Fix directly
+├─ Typo/format/comment? → Fix directly  
+├─ New feature/capability? → Create proposal
+├─ Breaking change? → Create proposal
+├─ Architecture change? → Create proposal
 └─ Unclear? → Create proposal (safer)
 \`\`\`
 
@@ -173,50 +181,38 @@ New test request?
 - [Mark breaking changes with **BREAKING**]
 
 ## Impact
-- Affected test specs: [list test capabilities]
-- Affected test code: [key test files/test systems]
+- Affected specs: [list capabilities]
+- Affected code: [key files/systems]
 \`\`\`
 
-3. **Create spec deltas:** \`specs/[test-capability]/spec.md\`
+3. **Create spec deltas:** \`specs/[capability]/spec.md\`
 \`\`\`markdown
 ## ADDED Requirements
-### Requirement: Login Test Coverage
-The test suite SHALL have comprehensive test coverage for login functionality.
+### Requirement: New Feature
+The system SHALL provide...
 
-#### Scenario: Valid login
-- **WHEN** user provides valid credentials
-- **THEN** user is authenticated and redirected
-
-#### Scenario: Invalid credentials
-- **WHEN** user provides invalid credentials
-- **THEN** error message is displayed
+#### Scenario: Success case
+- **WHEN** user performs action
+- **THEN** expected result
 
 ## MODIFIED Requirements
-### Requirement: Existing Test Coverage
-[Complete modified test requirement]
+### Requirement: Existing Feature
+[Complete modified requirement]
 
 ## REMOVED Requirements
-### Requirement: Old Test Scenario
+### Requirement: Old Feature
 **Reason**: [Why removing]
 **Migration**: [How to handle]
 \`\`\`
-If multiple test capabilities are affected, create multiple delta files under \`changes/[change-id]/specs/<test-capability>/spec.md\`—one per test capability.
+If multiple capabilities are affected, create multiple delta files under \`changes/[change-id]/specs/<capability>/spec.md\`—one per capability.
 
 4. **Create tasks.md:**
 \`\`\`markdown
-## 1. Test Planning
-- [ ] 1.1 Explore application under test and identify test scenarios
-- [ ] 1.2 Create test plan with happy paths and edge cases
-- [ ] 1.3 Document test scenarios in test plan
-
-## 2. Test Generation
-- [ ] 2.1 Generate Playwright tests from test plan
-- [ ] 2.2 Verify test files are created correctly
-
-## 3. Test Validation
-- [ ] 3.1 Run tests and identify failures
-- [ ] 3.2 Fix failing tests using test healing workflow
-- [ ] 3.3 Ensure all tests pass
+## 1. Implementation
+- [ ] 1.1 Create database schema
+- [ ] 1.2 Implement API endpoint
+- [ ] 1.3 Add frontend component
+- [ ] 1.4 Write tests
 \`\`\`
 
 5. **Create design.md when needed:**
@@ -267,31 +263,31 @@ Minimal \`design.md\` skeleton:
 ### Scenario: User login      ❌
 \`\`\`
 
-Every test requirement MUST have at least one test scenario.
+Every requirement MUST have at least one scenario.
 
-### Test Requirement Wording
-- Use SHALL/MUST for normative test requirements (avoid should/may unless intentionally non-normative)
+### Requirement Wording
+- Use SHALL/MUST for normative requirements (avoid should/may unless intentionally non-normative)
 
 ### Delta Operations
 
 - \`## ADDED Requirements\` - New capabilities
-- \`## MODIFIED Requirements\` - Changed test behavior
-- \`## REMOVED Requirements\` - Deprecated test scenarios
+- \`## MODIFIED Requirements\` - Changed behavior
+- \`## REMOVED Requirements\` - Deprecated features
 - \`## RENAMED Requirements\` - Name changes
 
 Headers matched with \`trim(header)\` - whitespace ignored.
 
 #### When to use ADDED vs MODIFIED
-- ADDED: Introduces a new test capability or sub-capability that can stand alone as a test requirement. Prefer ADDED when the change is orthogonal (e.g., adding "Login Test Coverage") rather than altering the semantics of an existing test requirement.
-- MODIFIED: Changes the test behavior, scope, or acceptance criteria of an existing test requirement. Always paste the full, updated test requirement content (header + all scenarios). The archiver will replace the entire test requirement with what you provide here; partial deltas will drop previous details.
+- ADDED: Introduces a new capability or sub-capability that can stand alone as a requirement. Prefer ADDED when the change is orthogonal (e.g., adding "Slash Command Configuration") rather than altering the semantics of an existing requirement.
+- MODIFIED: Changes the behavior, scope, or acceptance criteria of an existing requirement. Always paste the full, updated requirement content (header + all scenarios). The archiver will replace the entire requirement with what you provide here; partial deltas will drop previous details.
 - RENAMED: Use when only the name changes. If you also change behavior, use RENAMED (name) plus MODIFIED (content) referencing the new name.
 
-Common pitfall: Using MODIFIED to add a new test concern without including the previous text. This causes loss of detail at archive time. If you aren't explicitly changing the existing test requirement, add a new test requirement under ADDED instead.
+Common pitfall: Using MODIFIED to add a new concern without including the previous text. This causes loss of detail at archive time. If you aren’t explicitly changing the existing requirement, add a new requirement under ADDED instead.
 
-Authoring a MODIFIED test requirement correctly:
-1) Locate the existing test requirement in \`spectest/specs/<test-capability>/spec.md\`.
-2) Copy the entire test requirement block (from \`### Requirement: ...\` through its scenarios).
-3) Paste it under \`## MODIFIED Requirements\` and edit to reflect the new test behavior.
+Authoring a MODIFIED requirement correctly:
+1) Locate the existing requirement in \`spectest/specs/<capability>/spec.md\`.
+2) Copy the entire requirement block (from \`### Requirement: ...\` through its scenarios).
+3) Paste it under \`## MODIFIED Requirements\` and edit to reflect the new behavior.
 4) Ensure the header text matches exactly (whitespace-insensitive) and keep at least one \`#### Scenario:\`.
 
 Example for RENAMED:
@@ -340,25 +336,21 @@ spectest list
 # rg -n "Requirement:|Scenario:" spectest/specs
 # rg -n "^#|Requirement:" spectest/changes
 
-# 2) Choose change id and scaffold
-CHANGE=add-login-tests
-mkdir -p spectest/changes/$CHANGE/{specs/login-tests}
-printf "## Why\\nAdd test coverage for login functionality\\n\\n## What Changes\\n- Create test plan for login scenarios\\n- Generate Playwright tests\\n- Ensure all tests pass\\n" > spectest/changes/$CHANGE/proposal.md
-printf "## 1. Test Planning\\n- [ ] 1.1 Create test plan\\n## 2. Test Generation\\n- [ ] 2.1 Generate tests\\n" > spectest/changes/$CHANGE/tasks.md
+# 2) Choose test change id and scaffold
+CHANGE=add-login-flow-tests
+mkdir -p spectest/changes/$CHANGE/{specs/auth}
+printf "## Why\\n...\\n\\n## What Changes\\n- ...\\n\\n## Impact\\n- ...\\n" > spectest/changes/$CHANGE/proposal.md
+printf "## 1. Test Implementation\\n- [ ] 1.1 ...\\n" > spectest/changes/$CHANGE/tasks.md
 
-# 3) Add deltas (example)
-cat > spectest/changes/$CHANGE/specs/login-tests/spec.md << 'EOF'
+# 3) Add test spec deltas (example)
+cat > spectest/changes/$CHANGE/specs/auth/spec.md << 'EOF'
 ## ADDED Requirements
-### Requirement: Login Test Coverage
-The test suite SHALL have comprehensive test coverage for login functionality.
+### Requirement: Login Flow Tests
+The system SHALL have test coverage for user login flows.
 
-#### Scenario: Valid login
-- **WHEN** user provides valid credentials
-- **THEN** user is authenticated and redirected
-
-#### Scenario: Invalid credentials
-- **WHEN** user provides invalid credentials
-- **THEN** error message is displayed
+#### Scenario: Valid credentials login
+- **WHEN** a user submits valid credentials
+- **THEN** the user is authenticated and redirected to dashboard
 EOF
 
 # 4) Validate
@@ -368,36 +360,34 @@ spectest validate $CHANGE --strict
 ## Multi-Capability Example
 
 \`\`\`
-spectest/changes/add-checkout-tests/
+spectest/changes/add-2fa-notify/
 ├── proposal.md
 ├── tasks.md
 └── specs/
-    ├── checkout/
-    │   └── spec.md   # ADDED: Checkout test coverage
-    └── payment/
-        └── spec.md   # ADDED: Payment test coverage
+    ├── auth/
+    │   └── spec.md   # ADDED: Two-Factor Authentication
+    └── notifications/
+        └── spec.md   # ADDED: OTP email notification
 \`\`\`
 
-checkout/spec.md
+auth/spec.md
 \`\`\`markdown
 ## ADDED Requirements
-### Requirement: Checkout Test Coverage
-The test suite SHALL have test coverage for checkout flow.
+### Requirement: Two-Factor Authentication
 ...
 \`\`\`
 
-payment/spec.md
+notifications/spec.md
 \`\`\`markdown
 ## ADDED Requirements
-### Requirement: Payment Test Coverage
-The test suite SHALL have test coverage for payment processing.
+### Requirement: OTP Email Notification
 ...
 \`\`\`
 
 ## Best Practices
 
 ### Simplicity First
-- Default to <100 lines of new test code
+- Default to <100 lines of new code
 - Single-file implementations until proven insufficient
 - Avoid frameworks without clear justification
 - Choose boring, proven patterns
@@ -409,19 +399,19 @@ Only add complexity with:
 - Multiple proven use cases requiring abstraction
 
 ### Clear References
-- Use \`file.ts:42\` format for test code locations
+- Use \`file.ts:42\` format for code locations
 - Reference specs as \`specs/auth/spec.md\`
 - Link related changes and PRs
 
-### Test Capability Naming
-- Use verb-noun: \`login-tests\`, \`checkout-tests\`, \`payment-tests\`
-- Single test purpose per test capability
+### Capability Naming
+- Use verb-noun: \`user-auth\`, \`payment-capture\`
+- Single purpose per capability
 - 10-minute understandability rule
 - Split if description needs "AND"
 
 ### Change ID Naming
-- Use kebab-case, short and descriptive: \`add-login-tests\`, \`improve-checkout-coverage\`
-- Prefer verb-led prefixes: \`add-\`, \`update-\`, \`remove-\`, \`refactor-\`, \`improve-\`
+- Use kebab-case, short and descriptive: \`add-two-factor-auth\`
+- Prefer verb-led prefixes: \`add-\`, \`update-\`, \`remove-\`, \`refactor-\`
 - Ensure uniqueness; if taken, append \`-2\`, \`-3\`, etc.
 
 ## Tool Selection Guide
@@ -429,17 +419,17 @@ Only add complexity with:
 | Task | Tool | Why |
 |------|------|-----|
 | Find files by pattern | Glob | Fast pattern matching |
-| Search test code content | Grep | Optimized regex search |
+| Search code content | Grep | Optimized regex search |
 | Read specific files | Read | Direct file access |
 | Explore unknown scope | Task | Multi-step investigation |
 
 ## Error Recovery
 
-### Change Conflicts
-1. Run \`spectest list\` to see active changes
-2. Check for overlapping specs
-3. Coordinate with change owners
-4. Consider combining proposals
+### Test Change Conflicts
+1. Run \`spectest list\` to see active test changes
+2. Check for overlapping test specs
+3. Coordinate with test change owners
+4. Consider combining test proposals
 
 ### Validation Failures
 1. Run with \`--strict\` flag
@@ -456,145 +446,26 @@ Only add complexity with:
 ## Quick Reference
 
 ### Stage Indicators
-- \`changes/\` - Proposed, not yet implemented
-- \`specs/\` - Tests written and passing
+- \`changes/\` - Proposed test changes, not yet implemented
+- \`specs/\` - Implemented and deployed test specs
 - \`archive/\` - Completed test changes
 
 ### File Purposes
-- \`proposal.md\` - Why and what test coverage
+- \`proposal.md\` - Why and what test changes
 - \`tasks.md\` - Test implementation steps
-- \`design.md\` - Test strategy decisions
-- \`spec.md\` - Test requirements and test scenarios
+- \`design.md\` - Technical decisions for test automation
+- \`spec.md\` - Test requirements, scenarios, steps, and expected outcomes
 
 ### CLI Essentials
 \`\`\`bash
-spectest list              # What's in progress?
-spectest show [item]       # View details
-spectest validate --strict # Is it correct?
-spectest archive <change-id> [--yes|-y]  # Mark complete (add --yes for automation)
+spectest list              # What test changes are in progress?
+spectest show [item]       # View test change or test spec details
+spectest validate --strict # Is the test spec correct?
+spectest archive <change-id> [--yes|-y]  # Mark test change complete (add --yes for automation)
+spectest plan <spec-id>    # Generate test plan from test spec
+spectest generate <plan>   # Generate Playwright tests from test plan
+spectest heal              # Heal failing tests
 \`\`\`
 
-## Automation Test Workflows
-
-SpecTest is optimized for automation test development. Use these workflows when working with test plans, test generation, test healing, and test coverage.
-
-### Test Planning Workflow
-
-When asked to create a test plan for a web application under test:
-
-1. **Navigate and Explore**
-   - Set up the browser page using available browser automation tools
-   - Explore the browser snapshot to understand the interface
-   - Use browser tools to navigate and discover all interactive elements, forms, navigation paths, and functionality
-   - Do not take screenshots unless absolutely necessary
-
-2. **Analyze User Flows**
-   - Map out the primary user journeys and identify critical paths through the application under test
-   - Consider different user types and their typical behaviors
-
-3. **Design Comprehensive Scenarios**
-   - Create detailed test scenarios covering:
-     - Happy path scenarios (normal user behavior)
-     - Edge cases and boundary conditions
-     - Error handling and validation
-
-4. **Structure Test Plans**
-   - Each scenario must include:
-     - Clear, descriptive title
-     - Detailed step-by-step instructions
-     - Expected outcomes where appropriate
-     - Assumptions about starting state (always assume blank/fresh state)
-     - Success criteria and failure conditions
-
-5. **Create Documentation**
-   - Save the test plan as a markdown file with clear headings, numbered steps, and professional formatting
-   - Write steps specific enough for any tester to follow
-   - Include negative testing scenarios
-   - Ensure scenarios are independent and can be run in any order
-
-### Test Generation Workflow
-
-When asked to generate automated tests from a test plan:
-
-1. **Obtain Test Plan**
-   - Read the test plan with all steps and verification specifications
-
-2. **Set Up Test Environment**
-   - Set up the page for the scenario using available setup tools
-
-3. **Execute Steps**
-   - For each step and verification in the scenario:
-     - Use browser automation tools to manually execute it in real-time
-     - Use the step description as the intent for each tool call
-
-4. **Generate Test Code**
-   - Retrieve the test log from the execution
-   - Generate test source code following these patterns:
-     - File should contain single test
-     - File name must be filesystem-friendly scenario name
-     - Test must be placed in a describe block matching the top-level test plan item
-     - Test title must match the scenario name
-     - Include a comment with the step text before each step execution
-     - Do not duplicate comments if step requires multiple actions
-     - Always use best practices from the log when generating tests
-
-### Test Healing Workflow
-
-When asked to debug and fix failing tests:
-
-1. **Initial Execution**
-   - Run all tests to identify failing tests
-
-2. **Debug Failed Tests**
-   - For each failing test, run debug mode
-
-3. **Error Investigation**
-   - When the test pauses on errors, use available browser automation tools to:
-     - Examine the error details
-     - Capture page snapshot to understand the context
-     - Analyze selectors, timing issues, or assertion failures
-
-4. **Root Cause Analysis**
-   - Determine the underlying cause by examining:
-     - Element selectors that may have changed
-     - Timing and synchronization issues
-     - Data dependencies or test environment problems
-     - Application under test changes that broke test assumptions
-
-5. **Code Remediation**
-   - Edit the test code to address identified issues:
-     - Update selectors to match current application under test state
-     - Fix assertions and expected values
-     - Improve test reliability and maintainability
-     - For inherently dynamic data, utilize regular expressions to produce resilient locators
-
-6. **Verification**
-   - Restart the test after each fix to validate the changes
-
-7. **Iteration**
-   - Repeat the investigation and fixing process until the test passes cleanly
-   - Be systematic and thorough
-   - Document findings and reasoning for each fix
-   - Prefer robust, maintainable solutions over quick hacks
-   - If multiple errors exist, fix them one at a time and retest
-   - If error persists and you have high confidence the test is correct, mark as \`test.fixme()\` with a comment explaining the issue
-   - Never wait for networkidle or use other discouraged or deprecated APIs
-
-### Test Coverage Workflow
-
-When asked to analyze test coverage:
-
-1. **Plan Tests**
-   - Call the test planning workflow to create a comprehensive test plan for the given task
-   - Include seed file information if provided
-
-2. **Generate Tests**
-   - For each test case from the test plan, one after another (not in parallel):
-     - Call the test generation workflow
-     - Generate test files following the plan structure
-
-3. **Heal Tests**
-   - Run all tests and fix failing ones one after another using the test healing workflow
-
-Remember: Specs are truth. Changes are proposals. Keep them in sync.
+Remember: Test specs are truth. Test changes are proposals. Keep them in sync.
 `;

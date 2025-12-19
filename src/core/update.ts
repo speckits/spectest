@@ -72,7 +72,7 @@ export class UpdateCommand {
       }
 
       try {
-        const updated = await slashConfigurator.updateExisting(
+        const updated =         await slashConfigurator.updateExisting(
           resolvedProjectPath,
           spectestPath
         );

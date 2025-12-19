@@ -9,28 +9,28 @@ const FILE_PATHS: Record<SlashCommandId, string> = {
 
 const FRONTMATTER: Record<SlashCommandId, string> = {
   proposal: `---
-description: Scaffold a new SpecTest change and validate strictly.
+description: Scaffold a new SpecTest test change and validate strictly.
 ---
 
-The user has requested the following change proposal. Use the spectest instructions to create their change proposal.
+The user has requested the following test change proposal. Use the spectest instructions to create their test change proposal.
 
 <UserRequest>
   $ARGUMENTS
 </UserRequest>`,
   apply: `---
-description: Implement an approved SpecTest change and keep tasks in sync.
+description: Implement an approved SpecTest test change and keep tasks in sync.
 ---
 
-The user wants to apply the following change. Use the spectest instructions to implement the approved change.
+The user wants to apply the following test change. Use the spectest instructions to implement the approved test change.
 
 <ChangeId>
   $ARGUMENTS
 </ChangeId>`,
   archive: `---
-description: Archive a deployed SpecTest change and update specs.
+description: Archive a deployed SpecTest test change and update test specs.
 ---
 
-The user wants to archive the following deployed change. Use the spectest instructions to archive the change and update specs.
+The user wants to archive the following deployed test change. Use the spectest instructions to archive the test change and update test specs.
 
 <ChangeId>
   $ARGUMENTS

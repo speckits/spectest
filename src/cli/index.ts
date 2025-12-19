@@ -17,12 +17,10 @@ import { CompletionCommand } from '../commands/completion.js';
 
 const program = new Command();
 const require = createRequire(import.meta.url);
-const { version } = require('../../package.json');
 
 program
   .name('spectest')
-  .description('AI-native system for spec-driven test development')
-  .version(version);
+  .description('Spec-first Playwright test automation framework with AI-powered test generation');
 
 // Global options
 program.option('--no-color', 'Disable color output');
@@ -123,7 +121,7 @@ program
 // Change command with subcommands
 const changeCmd = program
   .command('change')
-  .description('Manage SpecTest change proposals');
+  .description('Manage SpecTest test change proposals');
 
 // Deprecation notice for noun-based commands
 changeCmd.hook('preAction', () => {
@@ -149,7 +147,7 @@ changeCmd
 
 changeCmd
   .command('list')
-  .description('List all active changes (DEPRECATED: use "spectest list" instead)')
+  .description('List all active test changes (DEPRECATED: use "spectest list" instead)')
   .option('--json', 'Output as JSON')
   .option('--long', 'Show id and title with counts')
   .action(async (options?: { json?: boolean; long?: boolean }) => {

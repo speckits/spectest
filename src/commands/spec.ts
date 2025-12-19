@@ -66,7 +66,7 @@ function printSpecTextRaw(specPath: string): void {
 }
 
 export class SpecCommand {
-  private SPECS_DIR = 'spectest/specs';
+    private SPECS_DIR = 'spectest/specs';
 
   async show(specId?: string, options: ShowOptions = {}): Promise<void> {
     if (!specId) {
@@ -111,7 +111,7 @@ export class SpecCommand {
 export function registerSpecCommand(rootProgram: typeof program) {
   const specCommand = rootProgram
     .command('spec')
-    .description('Manage and view SpecTest specifications');
+    .description('Manage and view SpecTest test specifications');
 
   // Deprecation notice for noun-based commands
   specCommand.hook('preAction', () => {

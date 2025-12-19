@@ -21,6 +21,7 @@ export class MarkdownParser {
     return content.replace(/\r\n?/g, '\n');
   }
 
+  // Parse test spec: recognizes test scenarios with WHEN/THEN patterns
   parseSpec(name: string): Spec {
     const sections = this.parseSections();
     const purpose = this.findSection(sections, 'Purpose')?.content || '';
@@ -28,11 +29,11 @@ export class MarkdownParser {
     const requirementsSection = this.findSection(sections, 'Requirements');
     
     if (!purpose) {
-      throw new Error('Spec must have a Purpose section');
+      throw new Error('Test spec must have a Purpose section');
     }
     
     if (!requirementsSection) {
-      throw new Error('Spec must have a Requirements section');
+      throw new Error('Test spec must have a Requirements section');
     }
 
     const requirements = this.parseRequirements(requirementsSection);

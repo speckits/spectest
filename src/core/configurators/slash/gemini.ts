@@ -8,9 +8,9 @@ const FILE_PATHS: Record<SlashCommandId, string> = {
 };
 
 const DESCRIPTIONS: Record<SlashCommandId, string> = {
-  proposal: 'Scaffold a new SpecTest change and validate strictly.',
-  apply: 'Implement an approved SpecTest change and keep tasks in sync.',
-  archive: 'Archive a deployed SpecTest change and update specs.'
+  proposal: 'Scaffold a new SpecTest test change and validate strictly.',
+  apply: 'Implement an approved SpecTest test change and keep tasks in sync.',
+  archive: 'Archive a deployed SpecTest test change and update test specs.'
 };
 
 export class GeminiSlashCommandConfigurator extends TomlSlashCommandConfigurator {

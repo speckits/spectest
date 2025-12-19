@@ -17,9 +17,9 @@ export class RooCodeSlashCommandConfigurator extends SlashCommandConfigurator {
 
   protected getFrontmatter(id: SlashCommandId): string | undefined {
     const descriptions: Record<SlashCommandId, string> = {
-      proposal: 'Scaffold a new SpecTest change and validate strictly.',
-      apply: 'Implement an approved SpecTest change and keep tasks in sync.',
-      archive: 'Archive a deployed SpecTest change and update specs.'
+      proposal: 'Scaffold a new SpecTest test change and validate strictly.',
+      apply: 'Implement an approved SpecTest test change and keep tasks in sync.',
+      archive: 'Archive a deployed SpecTest test change and update test specs.'
     };
     const description = descriptions[id];
     return `# SpecTest: ${id.charAt(0).toUpperCase() + id.slice(1)}\n\n${description}`;

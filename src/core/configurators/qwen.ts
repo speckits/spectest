@@ -30,7 +30,7 @@ export class QwenConfigurator implements ToolConfigurator {
    * with SpecTest instructions and markers.
    * 
    * @param {string} projectPath - The path to the project root
-   * @param {string} _spectestDir - The path to the Spectest directory (unused)
+   * @param {string} _spectestDir - The path to the spectest directory (unused)
    * @returns {Promise<void>} A promise that resolves when configuration is complete
    */
   async configure(projectPath: string, _spectestDir: string): Promise<void> {

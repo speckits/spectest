@@ -157,7 +157,7 @@ export const COMMAND_REGISTRY: CommandDefinition[] = [
   },
   {
     name: 'change',
-    description: 'Manage SpecTest change proposals (deprecated)',
+    description: 'Manage SpecTest test change proposals (deprecated)',
     flags: [],
     subcommands: [
       {
@@ -204,7 +204,7 @@ export const COMMAND_REGISTRY: CommandDefinition[] = [
   },
   {
     name: 'spec',
-    description: 'Manage SpecTest specifications',
+    description: 'Manage SpecTest test specifications',
     flags: [],
     subcommands: [
       {

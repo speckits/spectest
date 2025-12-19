@@ -9,7 +9,7 @@
   
 </p>
 <p align="center">Spec-driven automation test development for AI coding assistants.</p>
-<p align="center"><em>Forked from <a href="https://github.com/Fission-AI/OpenSpec">OpenSpec</a> and optimized for Playwright test automation</em></p>
+<p align="center"><em>Forked from <a href="https://github.com/speckits/openspec">OpenSpec</a> and optimized for Playwright test automation</em></p>
 <p align="center">
   <a href="https://github.com/speckit/spectest/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/speckit/spectest/actions/workflows/ci.yml/badge.svg" /></a>
   <a href="https://www.npmjs.com/package/@speckit/spectest"><img alt="npm version" src="https://img.shields.io/npm/v/@speckit/spectest?style=flat-square" /></a>
@@ -206,15 +206,16 @@ spectest init
 ```
 
 **What happens during initialization:**
-- You'll be prompted to pick any natively supported AI tools (Claude Code, CodeBuddy, Cursor, OpenCode, Qoder,etc.); other assistants always rely on the shared `AGENTS.md` stub
+- You'll be prompted to pick any natively supported AI tools (Claude Code, CodeBuddy, Cursor, OpenCode, Qoder, etc.); other assistants always rely on the shared `AGENTS.md` stub
 - SpecTest automatically configures slash commands for the tools you choose and always writes a managed `AGENTS.md` hand-off at the project root
 - A new `spectest/` directory structure is created in your test project
 
 **After setup:**
 - Primary AI tools can trigger `/spectest` workflows without additional configuration
 - Run `spectest list` to verify the setup and view any active changes
-- If your coding assistant doesn't surface the new slash commands right away, restart it. Slash commands are loaded at startup,
-  so a fresh launch ensures they appear
+- If your coding assistant doesn't surface the new slash commands right away, restart it. Slash commands are loaded at startup, so a fresh launch ensures they appear
+
+**Note:** Playwright configuration files are scaffolded automatically during the apply workflow when needed for test automation changes, not during init.
 
 ### Optional: Populate Test Project Context
 
@@ -272,8 +273,14 @@ You: The test plan looks good. Let's generate the Playwright tests.
 AI:  I'll work through the tasks in the add-login-tests change.
      *Uses test generation workflow to create Playwright tests from the test plan*
      *Executes steps in browser and generates Playwright test code*
+     *Runs tests with report and screenshot generation*
      *Marks tasks complete: Task 1.1 ✓, Task 2.1 ✓, Task 2.2 ✓...*
 ```
+
+**After implementing test changes, tests are automatically run with:**
+- HTML report generated in `playwright-report/` directory
+- Screenshots captured on test failures in `test-results/` directory
+- Review the HTML report at `playwright-report/index.html` to verify test results
 
 #### 5. Heal Tests (if needed)
 If any tests fail, use the test healing workflow:
@@ -310,11 +317,13 @@ $ spectest archive add-login-tests --yes  # Archive the completed change without
 ## Command Reference
 
 ```bash
-spectest list               # View active test change folders
-spectest view               # Interactive dashboard of test specs and changes
-spectest show <change>      # Display test change details (proposal, tasks, test spec updates)
-spectest validate <change>  # Check test spec formatting and structure
-spectest archive <change> [--yes|-y]   # Move a completed test change into archive/ (non-interactive with --yes)
+spectest init                    # Initialize SpecTest in your project
+spectest list                    # View active test change folders
+spectest list --specs            # View test specifications
+spectest view                    # Interactive dashboard of test specs and changes
+spectest show <change>           # Display test change details (proposal, tasks, test spec updates)
+spectest validate <change>       # Check test spec formatting and structure
+spectest archive <change> [--yes|-y]   # Move a completed test change into archive/
 ```
 
 ## Example: How AI Creates SpecTest Files
@@ -469,7 +478,7 @@ Run `spectest update` whenever someone switches tools so your agents pick up the
 
 ## Acknowledgments
 
-SpecTest is a fork of [OpenSpec](https://github.com/Fission-AI/OpenSpec), created by the OpenSpec contributors. We are grateful for their excellent work on the original project, which inspired and enabled SpecTest. OpenSpec's spec-driven test development philosophy and architecture form the foundation of SpecTest.
+SpecTest is a fork of [OpenSpec](https://github.com/speckits/openspec), created by the OpenSpec contributors. We are grateful for their excellent work on the original project, which inspired and enabled SpecTest. OpenSpec's spec-driven test development philosophy and architecture form the foundation of SpecTest.
 
 **Thank you to the OpenSpec team and community for building such a great tool!**
 

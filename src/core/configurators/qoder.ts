@@ -30,7 +30,7 @@ export class QoderConfigurator implements ToolConfigurator {
    * Wrapped with SpecTest markers for future updates.
    * 
    * @param {string} projectPath - Absolute path to project root directory
-   * @param {string} spectestDir - Path to Spectest directory (unused but required by interface)
+   * @param {string} spectestDir - Path to spectest directory (unused but required by interface)
    * @returns {Promise<void>} Resolves when configuration is complete
    */
   async configure(projectPath: string, spectestDir: string): Promise<void> {
