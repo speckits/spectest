@@ -19,14 +19,6 @@
   <a href="https://discord.gg/YctCnvvshC"><img alt="Discord" src="https://img.shields.io/badge/Discord-Join%20the%20community-5865F2?logo=discord&logoColor=white&style=flat-square" /></a>
 </p>
 
-<p align="center">
-  <img src="assets/spectest_dashboard.png" alt="SpecTest dashboard preview" width="90%">
-</p>
-
-<p align="center">
-  Follow <a href="https://x.com/0xTab">@0xTab on X</a> for updates · Join the <a href="https://discord.gg/YctCnvvshC">SpecTest Discord</a> for help and questions.
-</p>
-
 # SpecTest
 
 **SpecTest** is a specialized fork of [OpenSpec](https://github.com/Fission-AI/OpenSpec), optimized for automation test development. It extends OpenSpec's spec-driven test development workflow with specialized instructions, prompts, and workflows for creating, planning, and maintaining automated tests—particularly with Playwright.
