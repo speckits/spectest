@@ -15,8 +15,6 @@
   <a href="https://www.npmjs.com/package/@speckit/spectest"><img alt="npm version" src="https://img.shields.io/npm/v/@speckit/spectest?style=flat-square" /></a>
   <a href="https://nodejs.org/"><img alt="node version" src="https://img.shields.io/node/v/@speckit/spectest?style=flat-square" /></a>
   <a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" /></a>
-  <a href="https://conventionalcommits.org"><img alt="Conventional Commits" src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square" /></a>
-  <a href="https://discord.gg/YctCnvvshC"><img alt="Discord" src="https://img.shields.io/badge/Discord-Join%20the%20community-5865F2?logo=discord&logoColor=white&style=flat-square" /></a>
 </p>
 
 # SpecTest
