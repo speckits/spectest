@@ -1,9 +1,7 @@
 <p align="center">
   <a href="https://github.com/speckits/spectest">
     <picture>
-      <source srcset="assets/spectest_pixel_dark.svg" media="(prefers-color-scheme: dark)">
-      <source srcset="assets/spectest_pixel_light.svg" media="(prefers-color-scheme: light)">
-      <img src="assets/spectest_pixel_light.svg" alt="SpecTest logo" height="64">
+      <img src="assets/spectest.png" alt="SpecTest logo" height="64">
     </picture>
   </a>
   
@@ -15,16 +13,6 @@
   <a href="https://www.npmjs.com/package/@speckit/spectest"><img alt="npm version" src="https://img.shields.io/npm/v/@speckit/spectest?style=flat-square" /></a>
   <a href="https://nodejs.org/"><img alt="node version" src="https://img.shields.io/node/v/@speckit/spectest?style=flat-square" /></a>
   <a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" /></a>
-  <a href="https://conventionalcommits.org"><img alt="Conventional Commits" src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square" /></a>
-  <a href="https://discord.gg/YctCnvvshC"><img alt="Discord" src="https://img.shields.io/badge/Discord-Join%20the%20community-5865F2?logo=discord&logoColor=white&style=flat-square" /></a>
-</p>
-
-<p align="center">
-  <img src="assets/spectest_dashboard.png" alt="SpecTest dashboard preview" width="90%">
-</p>
-
-<p align="center">
-  Follow <a href="https://x.com/0xTab">@0xTab on X</a> for updates · Join the <a href="https://discord.gg/YctCnvvshC">SpecTest Discord</a> for help and questions.
 </p>
 
 # SpecTest
