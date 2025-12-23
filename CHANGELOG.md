@@ -1,5 +1,11 @@
 # @speckit/spectest
 
+## 0.1.4
+
+### Patch Changes
+
+- 1f39a91: Remove ASCII art letter map and update welcome banner for clarity
+
 ## 0.1.3
 
 ### Patch Changes
