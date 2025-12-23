@@ -30,60 +30,6 @@ const PROGRESS_SPINNER = {
   frames: ["░░░", "▒░░", "▒▒░", "▒▒▒", "▓▒▒", "▓▓▒", "▓▓▓", "▒▓▓", "░▒▓"],
 };
 
-const LETTER_MAP: Record<string, string[]> = {
-  S: [
-    " █████████ ",
-    "███▒▒▒▒▒███",
-    "▒███       ",
-    "▒▒█████████",
-    " ▒▒▒▒▒▒▒▒███",
-    " ███       ",
-    "▒▒█████████",
-    " ▒▒▒▒▒▒▒▒▒ ",
-  ],
-  P: [
-    " ███████████ ",
-    "▒▒███▒▒▒▒▒███",
-    " ▒███    ▒███",
-    " ▒██████████",
-    " ▒███▒▒▒▒▒▒ ",
-    " ▒███       ",
-    " █████       ",
-    " ▒▒▒▒▒       ",
-  ],
-  E: [
-    " ██████████ ",
-    "▒▒███▒▒▒▒▒█ ",
-    " ▒███  █ ▒ ",
-    " ▒██████   ",
-    " ▒███▒▒█   ",
-    " ▒███ ▒   █",
-    " ██████████",
-    " ▒▒▒▒▒▒▒▒▒▒",
-  ],
-  C: [
-    " █████████ ",
-    "███▒▒▒▒▒███",
-    "███        ",
-    "▒███       ",
-    "▒███       ",
-    "▒▒███     █",
-    " ▒▒████████",
-    "  ▒▒▒▒▒▒▒▒ ",
-  ],
-  T: [
-    " ███████████ ",
-    "▒█▒▒▒███▒▒▒█",
-    " ▒   ▒███  ▒",
-    "     ▒███   ",
-    "     ▒███   ",
-    "     ▒███   ",
-    "     █████  ",
-    "     ▒▒▒▒▒  ",
-  ],
-  " ": Array(8).fill("   "),
-};
-
 type ToolLabel = {
   primary: string;
   annotation?: string;
@@ -966,15 +912,13 @@ export class InitCommand {
         '    with details about my test project, test tech stack, and test conventions"\n'
       )
     );
-    console.log(PALETTE.white("2. Create your first test change proposal:"));
+    console.log(PALETTE.white("2. Create your first change proposal:"));
     console.log(
       PALETTE.lightGray(
-        '   "I want to add test coverage for [YOUR TEST SCENARIO/FLOW HERE]. Please create a'
+        '   "I want to add tests for [YOUR TEST SCENARIO/FLOW HERE]. Please create a'
       )
     );
-    console.log(
-      PALETTE.lightGray('    test change proposal with test scenarios"\n')
-    );
+    console.log(PALETTE.lightGray('    change proposal"\n'));
     console.log(PALETTE.white("3. Learn the SpecTest workflow:"));
     console.log(
       PALETTE.lightGray(
@@ -982,7 +926,9 @@ export class InitCommand {
       )
     );
     console.log(
-      PALETTE.lightGray('    and how I should work with you on test planning and generation"')
+      PALETTE.lightGray(
+        '    and how I should work with you on test planning and generation"'
+      )
     );
     console.log(
       PALETTE.darkGray(
@@ -1021,37 +967,18 @@ export class InitCommand {
   }
 
   private renderBanner(_extendMode: boolean): void {
-    const text = "SPECTEST";
-    const height = LETTER_MAP["S"].length;
-
-    const rows = Array.from({ length: height }, () => "");
-
-    for (const char of text) {
-      const glyph = LETTER_MAP[char] ?? LETTER_MAP[" "];
-      for (let i = 0; i < height; i += 1) {
-        rows[i] += `${glyph[i]}  `;
-      }
-    }
-
-    const rowStyles = [
-      PALETTE.white,
-      PALETTE.lightGray,
-      PALETTE.midGray,
-      PALETTE.darkGray,
-      PALETTE.darkGray,
-      PALETTE.midGray,
-      PALETTE.lightGray,
-      PALETTE.white,
+    const banner = [
+      "░█▀▀░█▀█░█▀▀░█▀▀░▀█▀░█▀▀░█▀▀░▀█▀",
+      "░▀▀█░█▀▀░█▀▀░█░░░░█░░█▀▀░▀▀█░░█░",
+      "░▀▀▀░▀░░░▀▀▀░▀▀▀░░▀░░▀▀▀░▀▀▀░░▀░",
     ];
 
     console.log();
-    rows.forEach((row, index) => {
-      const style = rowStyles[index] ?? PALETTE.white;
-      console.log(style(row.replace(/\s+$/u, "")));
+    banner.forEach((row) => {
+      console.log(row);
     });
     console.log();
     console.log(PALETTE.white("Welcome to SpecTest!"));
-    console.log(PALETTE.midGray("Spec-first Playwright automation framework"));
     console.log();
   }
 
