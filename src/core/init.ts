@@ -1,4 +1,3 @@
-import path from 'path';
 import {
   createPrompt,
   isBackspaceKey,
@@ -9,35 +8,80 @@ import {
   useKeypress,
   usePagination,
   useState,
-} from '@inquirer/core';
-import chalk from 'chalk';
-import ora from 'ora';
-import { FileSystemUtils } from '../utils/file-system.js';
-import { TemplateManager, ProjectContext } from './templates/index.js';
-import { ToolRegistry } from './configurators/registry.js';
-import { SlashCommandRegistry } from './configurators/slash/registry.js';
+} from "@inquirer/core";
+import chalk from "chalk";
+import ora from "ora";
+import path from "path";
+import { FileSystemUtils } from "../utils/file-system.js";
 import {
-  SpecTestConfig,
   AI_TOOLS,
-  SPECTEST_DIR_NAME,
   AIToolOption,
+  SPECTEST_DIR_NAME,
   SPECTEST_MARKERS,
-} from './config.js';
-import { PALETTE } from './styles/palette.js';
+  SpecTestConfig,
+} from "./config.js";
+import { ToolRegistry } from "./configurators/registry.js";
+import { SlashCommandRegistry } from "./configurators/slash/registry.js";
+import { PALETTE } from "./styles/palette.js";
+import { ProjectContext, TemplateManager } from "./templates/index.js";
 
 const PROGRESS_SPINNER = {
   interval: 80,
-  frames: ['░░░', '▒░░', '▒▒░', '▒▒▒', '▓▒▒', '▓▓▒', '▓▓▓', '▒▓▓', '░▒▓'],
+  frames: ["░░░", "▒░░", "▒▒░", "▒▒▒", "▓▒▒", "▓▓▒", "▓▓▓", "▒▓▓", "░▒▓"],
 };
 
 const LETTER_MAP: Record<string, string[]> = {
-  O: [' ████ ', '██  ██', '██  ██', '██  ██', ' ████ '],
-  P: ['█████ ', '██  ██', '█████ ', '██    ', '██    '],
-  E: ['██████', '██    ', '█████ ', '██    ', '██████'],
-  N: ['██  ██', '███ ██', '██ ███', '██  ██', '██  ██'],
-  S: [' █████', '██    ', ' ████ ', '    ██', '█████ '],
-  C: [' █████', '██    ', '██    ', '██    ', ' █████'],
-  ' ': ['  ', '  ', '  ', '  ', '  '],
+  S: [
+    " █████████ ",
+    "███▒▒▒▒▒███",
+    "▒███       ",
+    "▒▒█████████",
+    " ▒▒▒▒▒▒▒▒███",
+    " ███       ",
+    "▒▒█████████",
+    " ▒▒▒▒▒▒▒▒▒ ",
+  ],
+  P: [
+    " ███████████ ",
+    "▒▒███▒▒▒▒▒███",
+    " ▒███    ▒███",
+    " ▒██████████",
+    " ▒███▒▒▒▒▒▒ ",
+    " ▒███       ",
+    " █████       ",
+    " ▒▒▒▒▒       ",
+  ],
+  E: [
+    " ██████████ ",
+    "▒▒███▒▒▒▒▒█ ",
+    " ▒███  █ ▒ ",
+    " ▒██████   ",
+    " ▒███▒▒█   ",
+    " ▒███ ▒   █",
+    " ██████████",
+    " ▒▒▒▒▒▒▒▒▒▒",
+  ],
+  C: [
+    " █████████ ",
+    "███▒▒▒▒▒███",
+    "███        ",
+    "▒███       ",
+    "▒███       ",
+    "▒▒███     █",
+    " ▒▒████████",
+    "  ▒▒▒▒▒▒▒▒ ",
+  ],
+  T: [
+    " ███████████ ",
+    "▒█▒▒▒███▒▒▒█",
+    " ▒   ▒███  ▒",
+    "     ▒███   ",
+    "     ▒███   ",
+    "     ▒███   ",
+    "     █████  ",
+    "     ▒▒▒▒▒  ",
+  ],
+  " ": Array(8).fill("   "),
 };
 
 type ToolLabel = {
@@ -46,7 +90,7 @@ type ToolLabel = {
 };
 
 const sanitizeToolLabel = (raw: string): string =>
-  raw.replace(/✅/gu, '✔').trim();
+  raw.replace(/✅/gu, "✔").trim();
 
 const parseToolLabel = (raw: string): ToolLabel => {
   const sanitized = sanitizeToolLabel(raw);
@@ -62,17 +106,18 @@ const parseToolLabel = (raw: string): ToolLabel => {
 
 const isSelectableChoice = (
   choice: ToolWizardChoice
-): choice is Extract<ToolWizardChoice, { selectable: true }> => choice.selectable;
+): choice is Extract<ToolWizardChoice, { selectable: true }> =>
+  choice.selectable;
 
 type ToolWizardChoice =
   | {
-      kind: 'heading' | 'info';
+      kind: "heading" | "info";
       value: string;
       label: ToolLabel;
       selectable: false;
     }
   | {
-      kind: 'option';
+      kind: "option";
       value: string;
       label: ToolLabel;
       configured: boolean;
@@ -86,24 +131,24 @@ type ToolWizardConfig = {
   initialSelected?: string[];
 };
 
-type WizardStep = 'intro' | 'select' | 'review';
+type WizardStep = "intro" | "select" | "review";
 
 type ToolSelectionPrompt = (config: ToolWizardConfig) => Promise<string[]>;
 
-type RootStubStatus = 'created' | 'updated' | 'skipped';
+type RootStubStatus = "created" | "updated" | "skipped";
 
-const ROOT_STUB_CHOICE_VALUE = '__root_stub__';
+const ROOT_STUB_CHOICE_VALUE = "__root_stub__";
 
-const OTHER_TOOLS_HEADING_VALUE = '__heading-other__';
-const LIST_SPACER_VALUE = '__list-spacer__';
+const OTHER_TOOLS_HEADING_VALUE = "__heading-other__";
+const LIST_SPACER_VALUE = "__list-spacer__";
 
 const toolSelectionWizard = createPrompt<string[], ToolWizardConfig>(
   (config, done) => {
     const totalSteps = 3;
-    const [step, setStep] = useState<WizardStep>('intro');
+    const [step, setStep] = useState<WizardStep>("intro");
     const selectableChoices = config.choices.filter(isSelectableChoice);
-    const initialCursorIndex = config.choices.findIndex((choice) =>
-      choice.selectable
+    const initialCursorIndex = config.choices.findIndex(
+      (choice) => choice.selectable
     );
     const [cursor, setCursor] = useState<number>(
       initialCursorIndex === -1 ? 0 : initialCursorIndex
@@ -137,29 +182,31 @@ const toolSelectionWizard = createPrompt<string[], ToolWizardConfig>(
       loop: false,
       renderItem: ({ item, isActive }) => {
         if (!item.selectable) {
-          const prefix = item.kind === 'info' ? '  ' : '';
+          const prefix = item.kind === "info" ? "  " : "";
           const textColor =
-            item.kind === 'heading' ? PALETTE.lightGray : PALETTE.midGray;
-          return `${PALETTE.midGray(' ')} ${PALETTE.midGray(' ')} ${textColor(
+            item.kind === "heading" ? PALETTE.lightGray : PALETTE.midGray;
+          return `${PALETTE.midGray(" ")} ${PALETTE.midGray(" ")} ${textColor(
             `${prefix}${item.label.primary}`
           )}`;
         }
 
         const isSelected = selectedSet.has(item.value);
         const cursorSymbol = isActive
-          ? PALETTE.white('›')
-          : PALETTE.midGray(' ');
+          ? PALETTE.white("›")
+          : PALETTE.midGray(" ");
         const indicator = isSelected
-          ? PALETTE.white('◉')
-          : PALETTE.midGray('○');
+          ? PALETTE.white("◉")
+          : PALETTE.midGray("○");
         const nameColor = isActive ? PALETTE.white : PALETTE.midGray;
         const annotation = item.label.annotation
           ? PALETTE.midGray(` (${item.label.annotation})`)
-          : '';
+          : "";
         const configuredNote = item.configured
-          ? PALETTE.midGray(' (already configured)')
-          : '';
-        const label = `${nameColor(item.label.primary)}${annotation}${configuredNote}`;
+          ? PALETTE.midGray(" (already configured)")
+          : "";
+        const label = `${nameColor(
+          item.label.primary
+        )}${annotation}${configuredNote}`;
         return `${cursorSymbol} ${indicator} ${label}`;
       },
     });
@@ -184,14 +231,14 @@ const toolSelectionWizard = createPrompt<string[], ToolWizardConfig>(
     };
 
     useKeypress((key) => {
-      if (step === 'intro') {
+      if (step === "intro") {
         if (isEnterKey(key)) {
-          setStep('select');
+          setStep("select");
         }
         return;
       }
 
-      if (step === 'select') {
+      if (step === "select") {
         if (isUpKey(key)) {
           moveCursor(-1);
           setError(null);
@@ -231,12 +278,12 @@ const toolSelectionWizard = createPrompt<string[], ToolWizardConfig>(
             next.add(current.value);
             updateSelected(next);
           }
-          setStep('review');
+          setStep("review");
           setError(null);
           return;
         }
 
-        if (key.name === 'escape') {
+        if (key.name === "escape") {
           const next = new Set<string>();
           updateSelected(next);
           setError(null);
@@ -244,7 +291,7 @@ const toolSelectionWizard = createPrompt<string[], ToolWizardConfig>(
         return;
       }
 
-      if (step === 'review') {
+      if (step === "review") {
         if (isEnterKey(key)) {
           const finalSelection = config.choices
             .map((choice) => choice.value)
@@ -256,8 +303,8 @@ const toolSelectionWizard = createPrompt<string[], ToolWizardConfig>(
           return;
         }
 
-        if (isBackspaceKey(key) || key.name === 'escape') {
-          setStep('select');
+        if (isBackspaceKey(key) || key.name === "escape") {
+          setStep("select");
           setError(null);
         }
       }
@@ -281,90 +328,88 @@ const toolSelectionWizard = createPrompt<string[], ToolWizardConfig>(
     ) => {
       const annotation = choice.label.annotation
         ? PALETTE.midGray(` (${choice.label.annotation})`)
-        : '';
+        : "";
       const configuredNote = choice.configured
-        ? PALETTE.midGray(' (already configured)')
-        : '';
-      return `${PALETTE.white(choice.label.primary)}${annotation}${configuredNote}`;
+        ? PALETTE.midGray(" (already configured)")
+        : "";
+      return `${PALETTE.white(
+        choice.label.primary
+      )}${annotation}${configuredNote}`;
     };
 
-    const stepIndex = step === 'intro' ? 1 : step === 'select' ? 2 : 3;
+    const stepIndex = step === "intro" ? 1 : step === "select" ? 2 : 3;
     const lines: string[] = [];
     lines.push(PALETTE.midGray(`Step ${stepIndex}/${totalSteps}`));
-    lines.push('');
+    lines.push("");
 
-    if (step === 'intro') {
+    if (step === "intro") {
       const introHeadline = config.extendMode
-        ? 'Extend your SpecTest tooling'
-        : 'Configure your SpecTest tooling';
+        ? "Extend your SpecTest tooling"
+        : "Configure your SpecTest tooling";
       const introBody = config.extendMode
-        ? 'We detected an existing setup. We will help you refresh or add integrations.'
-        : "Let's get your AI assistants connected so they understand SpecTest.";
+        ? "We detected an existing setup. We will help you refresh or add integrations."
+        : "Let's get your AI assistants connected so they understand SpecTest workflows.";
 
       lines.push(PALETTE.white(introHeadline));
       lines.push(PALETTE.midGray(introBody));
-      lines.push('');
-      lines.push(PALETTE.midGray('Press Enter to continue.'));
-    } else if (step === 'select') {
+      lines.push("");
+      lines.push(PALETTE.midGray("Press Enter to continue."));
+    } else if (step === "select") {
       lines.push(PALETTE.white(config.baseMessage));
       lines.push(
         PALETTE.midGray(
-          'Use ↑/↓ to move · Space to toggle · Enter selects highlighted tool and reviews.'
+          "Use ↑/↓ to move · Space to toggle · Enter selects highlighted tool and reviews."
         )
       );
-      lines.push('');
+      lines.push("");
       lines.push(page);
-      lines.push('');
-      lines.push(PALETTE.midGray('Selected configuration:'));
+      lines.push("");
+      lines.push(PALETTE.midGray("Selected configuration:"));
       if (rootStubSelected && rootStubChoice) {
         lines.push(
-          `  ${PALETTE.white('-')} ${formatSummaryLabel(rootStubChoice)}`
+          `  ${PALETTE.white("-")} ${formatSummaryLabel(rootStubChoice)}`
         );
       }
       if (selectedNativeChoices.length === 0) {
         lines.push(
-          `  ${PALETTE.midGray('- No natively supported providers selected')}`
+          `  ${PALETTE.midGray("- No natively supported providers selected")}`
         );
       } else {
         selectedNativeChoices.forEach((choice) => {
-          lines.push(
-            `  ${PALETTE.white('-')} ${formatSummaryLabel(choice)}`
-          );
+          lines.push(`  ${PALETTE.white("-")} ${formatSummaryLabel(choice)}`);
         });
       }
     } else {
-      lines.push(PALETTE.white('Review selections'));
+      lines.push(PALETTE.white("Review selections"));
       lines.push(
-        PALETTE.midGray('Press Enter to confirm or Backspace to adjust.')
+        PALETTE.midGray("Press Enter to confirm or Backspace to adjust.")
       );
-      lines.push('');
+      lines.push("");
 
       if (rootStubSelected && rootStubChoice) {
         lines.push(
-          `${PALETTE.white('▌')} ${formatSummaryLabel(rootStubChoice)}`
+          `${PALETTE.white("▌")} ${formatSummaryLabel(rootStubChoice)}`
         );
       }
 
       if (selectedNativeChoices.length === 0) {
         lines.push(
           PALETTE.midGray(
-            'No natively supported providers selected. Universal instructions will still be applied.'
+            "No natively supported providers selected. Universal instructions will still be applied."
           )
         );
       } else {
         selectedNativeChoices.forEach((choice) => {
-          lines.push(
-            `${PALETTE.white('▌')} ${formatSummaryLabel(choice)}`
-          );
+          lines.push(`${PALETTE.white("▌")} ${formatSummaryLabel(choice)}`);
         });
       }
     }
 
     if (error) {
-      return [lines.join('\n'), chalk.red(error)];
+      return [lines.join("\n"), chalk.red(error)];
     }
 
-    return lines.join('\n');
+    return lines.join("\n");
   }
 );
 
@@ -389,7 +434,10 @@ export class InitCommand {
 
     // Validation happens silently in the background
     const extendMode = await this.validate(projectPath, spectestPath);
-    const existingToolStates = await this.getExistingToolStates(projectPath, extendMode);
+    const existingToolStates = await this.getExistingToolStates(
+      projectPath,
+      extendMode
+    );
 
     this.renderBanner(extendMode);
 
@@ -417,18 +465,18 @@ export class InitCommand {
     // Step 1: Create directory structure
     if (!extendMode) {
       const structureSpinner = this.startSpinner(
-        'Creating SpecTest structure...'
+        "Creating SpecTest structure..."
       );
       await this.createDirectoryStructure(spectestPath);
       await this.generateFiles(spectestPath, config);
       structureSpinner.stopAndPersist({
-        symbol: PALETTE.white('▌'),
-        text: PALETTE.white('SpecTest structure created'),
+        symbol: PALETTE.white("▌"),
+        text: PALETTE.white("SpecTest structure created"),
       });
     } else {
       ora({ stream: process.stdout }).info(
         PALETTE.midGray(
-          'ℹ SpecTest already initialized. Checking for missing files...'
+          "ℹ SpecTest already initialized. Checking for missing files..."
         )
       );
       await this.createDirectoryStructure(spectestPath);
@@ -436,15 +484,15 @@ export class InitCommand {
     }
 
     // Step 2: Configure AI tools
-    const toolSpinner = this.startSpinner('Configuring AI tools...');
+    const toolSpinner = this.startSpinner("Configuring AI tools...");
     const rootStubStatus = await this.configureAITools(
       projectPath,
       spectestDir,
       config.aiTools
     );
     toolSpinner.stopAndPersist({
-      symbol: PALETTE.white('▌'),
-      text: PALETTE.white('AI tools configured'),
+      symbol: PALETTE.white("▌"),
+      text: PALETTE.white("AI tools configured"),
     });
 
     // Success message
@@ -476,7 +524,10 @@ export class InitCommand {
     existingTools: Record<string, boolean>,
     extendMode: boolean
   ): Promise<SpecTestConfig> {
-    const selectedTools = await this.getSelectedTools(existingTools, extendMode);
+    const selectedTools = await this.getSelectedTools(
+      existingTools,
+      extendMode
+    );
     return { aiTools: selectedTools };
   }
 
@@ -494,7 +545,7 @@ export class InitCommand {
   }
 
   private resolveToolsArg(): string[] | null {
-    if (typeof this.toolsArg === 'undefined') {
+    if (typeof this.toolsArg === "undefined") {
       return null;
     }
 
@@ -508,19 +559,19 @@ export class InitCommand {
     const availableTools = AI_TOOLS.filter((tool) => tool.available);
     const availableValues = availableTools.map((tool) => tool.value);
     const availableSet = new Set(availableValues);
-    const availableList = ['all', 'none', ...availableValues].join(', ');
+    const availableList = ["all", "none", ...availableValues].join(", ");
 
     const lowerRaw = raw.toLowerCase();
-    if (lowerRaw === 'all') {
+    if (lowerRaw === "all") {
       return availableValues;
     }
 
-    if (lowerRaw === 'none') {
+    if (lowerRaw === "none") {
       return [];
     }
 
     const tokens = raw
-      .split(',')
+      .split(",")
       .map((token) => token.trim())
       .filter((token) => token.length > 0);
 
@@ -532,8 +583,10 @@ export class InitCommand {
 
     const normalizedTokens = tokens.map((token) => token.toLowerCase());
 
-    if (normalizedTokens.some((token) => token === 'all' || token === 'none')) {
-      throw new Error('Cannot combine reserved values "all" or "none" with specific tool IDs.');
+    if (normalizedTokens.some((token) => token === "all" || token === "none")) {
+      throw new Error(
+        'Cannot combine reserved values "all" or "none" with specific tool IDs.'
+      );
     }
 
     const invalidTokens = tokens.filter(
@@ -542,7 +595,9 @@ export class InitCommand {
 
     if (invalidTokens.length > 0) {
       throw new Error(
-        `Invalid tool(s): ${invalidTokens.join(', ')}. Available values: ${availableList}`
+        `Invalid tool(s): ${invalidTokens.join(
+          ", "
+        )}. Available values: ${availableList}`
       );
     }
 
@@ -563,8 +618,8 @@ export class InitCommand {
     const availableTools = AI_TOOLS.filter((tool) => tool.available);
 
     const baseMessage = extendMode
-      ? 'Which natively supported AI tools would you like to add or refresh?'
-      : 'Which natively supported AI tools do you use?';
+      ? "Which natively supported AI tools would you like to add or refresh?"
+      : "Which natively supported AI tools do you use?";
     const initialNativeSelection = extendMode
       ? availableTools
           .filter((tool) => existingTools[tool.value])
@@ -575,16 +630,16 @@ export class InitCommand {
 
     const choices: ToolWizardChoice[] = [
       {
-        kind: 'heading',
-        value: '__heading-native__',
+        kind: "heading",
+        value: "__heading-native__",
         label: {
           primary:
-            'Natively supported providers (✔ SpecTest custom slash commands available)',
+            "Natively supported providers (✔ SpecTest custom slash commands available)",
         },
         selectable: false,
       },
       ...availableTools.map<ToolWizardChoice>((tool) => ({
-        kind: 'option',
+        kind: "option",
         value: tool.value,
         label: parseToolLabel(tool.name),
         configured: Boolean(existingTools[tool.value]),
@@ -593,28 +648,28 @@ export class InitCommand {
       ...(availableTools.length
         ? ([
             {
-              kind: 'info' as const,
+              kind: "info" as const,
               value: LIST_SPACER_VALUE,
-              label: { primary: '' },
+              label: { primary: "" },
               selectable: false,
             },
           ] as ToolWizardChoice[])
         : []),
       {
-        kind: 'heading',
+        kind: "heading",
         value: OTHER_TOOLS_HEADING_VALUE,
         label: {
           primary:
-            'Other tools (use Universal AGENTS.md for Amp, VS Code, GitHub Copilot, …)',
+            "Other tools (use Universal AGENTS.md for Amp, VS Code, GitHub Copilot, …)",
         },
         selectable: false,
       },
       {
-        kind: 'option',
+        kind: "option",
         value: ROOT_STUB_CHOICE_VALUE,
         label: {
-          primary: 'Universal AGENTS.md',
-          annotation: 'always available',
+          primary: "Universal AGENTS.md",
+          annotation: "always available",
         },
         configured: extendMode,
         selectable: true,
@@ -635,12 +690,15 @@ export class InitCommand {
   ): Promise<Record<string, boolean>> {
     // Fresh initialization - no tools configured yet
     if (!extendMode) {
-      return Object.fromEntries(AI_TOOLS.map(t => [t.value, false]));
+      return Object.fromEntries(AI_TOOLS.map((t) => [t.value, false]));
     }
 
     // Extend mode - check all tools in parallel for better performance
     const entries = await Promise.all(
-      AI_TOOLS.map(async (t) => [t.value, await this.isToolConfigured(projectPath, t.value)] as const)
+      AI_TOOLS.map(
+        async (t) =>
+          [t.value, await this.isToolConfigured(projectPath, t.value)] as const
+      )
     );
     return Object.fromEntries(entries);
   }
@@ -657,7 +715,10 @@ export class InitCommand {
     const fileHasMarkers = async (absolutePath: string): Promise<boolean> => {
       try {
         const content = await FileSystemUtils.readFile(absolutePath);
-        return content.includes(SPECTEST_MARKERS.start) && content.includes(SPECTEST_MARKERS.end);
+        return (
+          content.includes(SPECTEST_MARKERS.start) &&
+          content.includes(SPECTEST_MARKERS.end)
+        );
       } catch {
         return false;
       }
@@ -670,15 +731,23 @@ export class InitCommand {
     const configFile = ToolRegistry.get(toolId)?.configFileName;
     if (configFile) {
       const configPath = path.join(projectPath, configFile);
-      hasConfigFile = (await FileSystemUtils.fileExists(configPath)) && (await fileHasMarkers(configPath));
+      hasConfigFile =
+        (await FileSystemUtils.fileExists(configPath)) &&
+        (await fileHasMarkers(configPath));
     }
 
     // Check if any slash command file exists with SpecTest markers
     const slashConfigurator = SlashCommandRegistry.get(toolId);
     if (slashConfigurator) {
       for (const target of slashConfigurator.getTargets()) {
-        const absolute = slashConfigurator.resolveAbsolutePath(projectPath, target.id);
-        if ((await FileSystemUtils.fileExists(absolute)) && (await fileHasMarkers(absolute))) {
+        const absolute = slashConfigurator.resolveAbsolutePath(
+          projectPath,
+          target.id
+        );
+        if (
+          (await FileSystemUtils.fileExists(absolute)) &&
+          (await fileHasMarkers(absolute))
+        ) {
           hasSlashCommands = true;
           break; // At least one file with markers is sufficient
         }
@@ -708,9 +777,9 @@ export class InitCommand {
   private async createDirectoryStructure(spectestPath: string): Promise<void> {
     const directories = [
       spectestPath,
-      path.join(spectestPath, 'specs'),
-      path.join(spectestPath, 'changes'),
-      path.join(spectestPath, 'changes', 'archive'),
+      path.join(spectestPath, "specs"),
+      path.join(spectestPath, "changes"),
+      path.join(spectestPath, "changes", "archive"),
     ];
 
     for (const dir of directories) {
@@ -752,7 +821,7 @@ export class InitCommand {
       }
 
       const content =
-        typeof template.content === 'function'
+        typeof template.content === "function"
           ? template.content(context)
           : template.content;
 
@@ -785,14 +854,13 @@ export class InitCommand {
     return rootStubStatus;
   }
 
-
   private async configureRootAgentsStub(
     projectPath: string,
     spectestDir: string
   ): Promise<RootStubStatus> {
-    const configurator = ToolRegistry.get('agents');
+    const configurator = ToolRegistry.get("agents");
     if (!configurator || !configurator.isAvailable) {
-      return 'skipped';
+      return "skipped";
     }
 
     const stubPath = path.join(projectPath, configurator.configFileName);
@@ -800,7 +868,7 @@ export class InitCommand {
 
     await configurator.configure(projectPath, spectestDir);
 
-    return existed ? 'updated' : 'created';
+    return existed ? "updated" : "created";
   }
 
   private displaySuccessMessage(
@@ -814,41 +882,41 @@ export class InitCommand {
   ): void {
     console.log(); // Empty line for spacing
     const successHeadline = extendMode
-      ? 'SpecTest tool configuration updated!'
-      : 'SpecTest initialized successfully!';
+      ? "SpecTest tool configuration updated!"
+      : "SpecTest initialized successfully!";
     ora().succeed(PALETTE.white(successHeadline));
 
     console.log();
-    console.log(PALETTE.lightGray('Tool summary:'));
+    console.log(PALETTE.lightGray("Tool summary:"));
     const summaryLines = [
-      rootStubStatus === 'created'
-        ? `${PALETTE.white('▌')} ${PALETTE.white(
-            'Root AGENTS.md stub created for other assistants'
+      rootStubStatus === "created"
+        ? `${PALETTE.white("▌")} ${PALETTE.white(
+            "Root AGENTS.md stub created for other assistants"
           )}`
         : null,
-      rootStubStatus === 'updated'
-        ? `${PALETTE.lightGray('▌')} ${PALETTE.lightGray(
-            'Root AGENTS.md stub refreshed for other assistants'
+      rootStubStatus === "updated"
+        ? `${PALETTE.lightGray("▌")} ${PALETTE.lightGray(
+            "Root AGENTS.md stub refreshed for other assistants"
           )}`
         : null,
       created.length
-        ? `${PALETTE.white('▌')} ${PALETTE.white(
-            'Created:'
+        ? `${PALETTE.white("▌")} ${PALETTE.white(
+            "Created:"
           )} ${this.formatToolNames(created)}`
         : null,
       refreshed.length
-        ? `${PALETTE.lightGray('▌')} ${PALETTE.lightGray(
-            'Refreshed:'
+        ? `${PALETTE.lightGray("▌")} ${PALETTE.lightGray(
+            "Refreshed:"
           )} ${this.formatToolNames(refreshed)}`
         : null,
       skippedExisting.length
-        ? `${PALETTE.midGray('▌')} ${PALETTE.midGray(
-            'Skipped (already configured):'
+        ? `${PALETTE.midGray("▌")} ${PALETTE.midGray(
+            "Skipped (already configured):"
           )} ${this.formatToolNames(skippedExisting)}`
         : null,
       skipped.length
-        ? `${PALETTE.darkGray('▌')} ${PALETTE.darkGray(
-            'Skipped:'
+        ? `${PALETTE.darkGray("▌")} ${PALETTE.darkGray(
+            "Skipped:"
           )} ${this.formatToolNames(skipped)}`
         : null,
     ].filter((line): line is string => Boolean(line));
@@ -859,22 +927,22 @@ export class InitCommand {
     console.log();
     console.log(
       PALETTE.midGray(
-        'Use `spectest update` to refresh shared SpecTest instructions in the future.'
+        "Use `spectest update` to refresh shared SpecTest instructions in the future."
       )
     );
 
     // Show restart instruction if any tools were configured
     if (created.length > 0 || refreshed.length > 0) {
       console.log();
-      console.log(PALETTE.white('Important: Restart your IDE'));
+      console.log(PALETTE.white("Important: Restart your IDE"));
       console.log(
         PALETTE.midGray(
-          'Slash commands are loaded at startup. Please restart your coding assistant'
+          "Slash commands are loaded at startup. Please restart your coding assistant"
         )
       );
       console.log(
         PALETTE.midGray(
-          'to ensure the new /spectest commands appear in your command palette.'
+          "to ensure the new /spectest commands appear in your command palette."
         )
       );
     }
@@ -885,9 +953,9 @@ export class InitCommand {
     console.log();
     console.log(`Next steps - Copy these prompts to ${toolName}:`);
     console.log(
-      chalk.gray('────────────────────────────────────────────────────────────')
+      chalk.gray("────────────────────────────────────────────────────────────")
     );
-    console.log(PALETTE.white('1. Populate your project context:'));
+    console.log(PALETTE.white("1. Populate your test project context:"));
     console.log(
       PALETTE.lightGray(
         '   "Please read spectest/project.md and help me fill it out'
@@ -895,39 +963,41 @@ export class InitCommand {
     );
     console.log(
       PALETTE.lightGray(
-        '    with details about my project, tech stack, and conventions"\n'
+        '    with details about my test project, test tech stack, and test conventions"\n'
       )
     );
-    console.log(PALETTE.white('2. Create your first change proposal:'));
+    console.log(PALETTE.white("2. Create your first test change proposal:"));
     console.log(
       PALETTE.lightGray(
-        '   "I want to add [YOUR FEATURE HERE]. Please create an'
+        '   "I want to add test coverage for [YOUR TEST SCENARIO/FLOW HERE]. Please create a'
       )
     );
     console.log(
-      PALETTE.lightGray('    SpecTest test change proposal for this feature"\n')
+      PALETTE.lightGray('    test change proposal with test scenarios"\n')
     );
-    console.log(PALETTE.white('3. Learn the SpecTest workflow:'));
+    console.log(PALETTE.white("3. Learn the SpecTest workflow:"));
     console.log(
       PALETTE.lightGray(
         '   "Please explain the SpecTest workflow from spectest/AGENTS.md'
       )
     );
     console.log(
-      PALETTE.lightGray('    and how I should work with you on this project"')
+      PALETTE.lightGray('    and how I should work with you on test planning and generation"')
     );
     console.log(
       PALETTE.darkGray(
-        '────────────────────────────────────────────────────────────\n'
+        "────────────────────────────────────────────────────────────\n"
       )
     );
 
     // Codex heads-up: prompts installed globally
     const selectedToolIds = new Set(selectedTools.map((t) => t.value));
-    if (selectedToolIds.has('codex')) {
-      console.log(PALETTE.white('Codex setup note'));
+    if (selectedToolIds.has("codex")) {
+      console.log(PALETTE.white("Codex setup note"));
       console.log(
-        PALETTE.midGray('Prompts installed to ~/.codex/prompts (or $CODEX_HOME/prompts).')
+        PALETTE.midGray(
+          "Prompts installed to ~/.codex/prompts (or $CODEX_HOME/prompts)."
+        )
       );
       console.log();
     }
@@ -939,22 +1009,26 @@ export class InitCommand {
       .filter((name): name is string => Boolean(name));
 
     if (names.length === 0)
-      return PALETTE.lightGray('your AGENTS.md-compatible assistant');
+      return PALETTE.lightGray("your AGENTS.md-compatible assistant");
     if (names.length === 1) return PALETTE.white(names[0]);
 
     const base = names.slice(0, -1).map((name) => PALETTE.white(name));
     const last = PALETTE.white(names[names.length - 1]);
 
-    return `${base.join(PALETTE.midGray(', '))}${
-      base.length ? PALETTE.midGray(', and ') : ''
+    return `${base.join(PALETTE.midGray(", "))}${
+      base.length ? PALETTE.midGray(", and ") : ""
     }${last}`;
   }
 
   private renderBanner(_extendMode: boolean): void {
-    const rows = ['', '', '', '', ''];
-    for (const char of 'SPECTEST') {
-      const glyph = LETTER_MAP[char] ?? LETTER_MAP[' '];
-      for (let i = 0; i < rows.length; i += 1) {
+    const text = "SPECTEST";
+    const height = LETTER_MAP["S"].length;
+
+    const rows = Array.from({ length: height }, () => "");
+
+    for (const char of text) {
+      const glyph = LETTER_MAP[char] ?? LETTER_MAP[" "];
+      for (let i = 0; i < height; i += 1) {
         rows[i] += `${glyph[i]}  `;
       }
     }
@@ -963,16 +1037,21 @@ export class InitCommand {
       PALETTE.white,
       PALETTE.lightGray,
       PALETTE.midGray,
+      PALETTE.darkGray,
+      PALETTE.darkGray,
+      PALETTE.midGray,
       PALETTE.lightGray,
       PALETTE.white,
     ];
 
     console.log();
     rows.forEach((row, index) => {
-      console.log(rowStyles[index](row.replace(/\s+$/u, '')));
+      const style = rowStyles[index] ?? PALETTE.white;
+      console.log(style(row.replace(/\s+$/u, "")));
     });
     console.log();
-    console.log(PALETTE.white('Welcome to SpecTest!'));
+    console.log(PALETTE.white("Welcome to SpecTest!"));
+    console.log(PALETTE.midGray("Spec-first Playwright automation framework"));
     console.log();
   }
 
@@ -980,7 +1059,7 @@ export class InitCommand {
     return ora({
       text,
       stream: process.stdout,
-      color: 'gray',
+      color: "gray",
       spinner: PROGRESS_SPINNER,
     }).start();
   }

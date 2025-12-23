@@ -9,35 +9,48 @@ const proposalGuardrails = `${baseGuardrails}\n- Identify any vague or ambiguous
 - Do not write any code during the proposal stage. Only create design documents (proposal.md, tasks.md, design.md, and spec deltas). Implementation happens in the apply stage after approval.`;
 
 const proposalSteps = `**Steps**
-1. Review \`spectest/project.md\`, run \`spectest list\` and \`spectest list --specs\`, and inspect related code or docs (e.g., via \`rg\`/\`ls\`) to ground the proposal in current behaviour; note any gaps that require clarification.
+1. Review \`spectest/project.md\`, run \`spectest list\` and \`spectest list --specs\`, and inspect related test code or docs (e.g., via \`rg\`/\`ls\`) to ground the test proposal in current behavior; note any coverage gaps that require clarification.
 2. Choose a unique verb-led \`change-id\` and scaffold \`proposal.md\`, \`tasks.md\`, and \`design.md\` (when needed) under \`spectest/changes/<id>/\`.
-3. Map the change into concrete capabilities or requirements, breaking multi-scope efforts into distinct spec deltas with clear relationships and sequencing.
+3. Map the change into concrete test capabilities or test requirements, breaking multi-scope efforts into distinct spec deltas with clear relationships and sequencing.
 4. Capture architectural reasoning in \`design.md\` when the solution spans multiple systems, introduces new patterns, or demands trade-off discussion before committing to specs.
-5. Draft spec deltas in \`changes/<id>/specs/<capability>/spec.md\` (one folder per capability) using \`## ADDED|MODIFIED|REMOVED Requirements\` with at least one \`#### Scenario:\` per requirement and cross-reference related capabilities when relevant.
-6. Draft \`tasks.md\` as an ordered list of small, verifiable work items that deliver user-visible progress, include validation (tests, tooling), and highlight dependencies or parallelizable work.
+5. Draft spec deltas in \`changes/<id>/specs/<test-capability>/spec.md\` (one folder per test capability) using \`## ADDED|MODIFIED|REMOVED Requirements\` with at least one \`#### Scenario:\` per test requirement describing test steps (WHEN) and expected outcomes (THEN), and cross-reference related test capabilities when relevant.
+6. Draft \`tasks.md\` as an ordered list of small, verifiable implementation work items that deliver coverage progress, include validation, and highlight dependencies or parallelizable work.
 7. Validate with \`spectest validate <id> --strict\` and resolve every issue before sharing the proposal.`;
 
 
 const proposalReferences = `**Reference**
 - Use \`spectest show <id> --json --deltas-only\` or \`spectest show <spec> --type spec\` to inspect details when validation fails.
-- Search existing requirements with \`rg -n "Requirement:|Scenario:" spectest/specs\` before writing new ones.
+- Search existing test requirements with \`rg -n "Requirement:|Scenario:" spectest/specs\` before writing new ones.
 - Explore the codebase with \`rg <keyword>\`, \`ls\`, or direct file reads so proposals align with current implementation realities.`;
 
 const applySteps = `**Steps**
 Track these steps as TODOs and complete them one by one.
 1. Read \`changes/<id>/proposal.md\`, \`design.md\` (if present), and \`tasks.md\` to confirm scope and acceptance criteria.
-2. **If this is a test automation change and Playwright files don't exist**, scaffold them first:
+2. **If this is an automation change and Playwright files don't exist**, scaffold them first:
    - Check if \`playwright.config.ts\` exists. If not, create it along with \`tests/fixtures.ts\` and \`tests/seed.spec.ts\`.
    - Use the Playwright scaffolding utility or create the files manually following Playwright conventions.
-3. Work through tasks sequentially, keeping edits minimal and focused on the requested change.
-4. **After implementing test changes, run tests with report and screenshot generation**:
+3. **For test planning tasks**: Use Playwright Planner workflow:
+   - Run \`spectest plan <spec-id>\` to explore app and create test plans
+   - Include \`seed.spec.ts\` in planning context
+   - Navigate and explore interface to identify test scenarios
+   - Save test plan to \`specs/\` directory
+4. **For test generation tasks**: Use Playwright Generator workflow:
+   - Run \`spectest generate <plan-file>\` to transform plans into tests
+   - Generator will execute steps in real-time and verify selectors
+   - Tests will be generated in \`tests/\` directory matching plan structure
+5. **For test healing tasks**: Use Playwright Healer workflow:
+   - Run \`spectest heal\` to automatically fix failing tests
+   - Healer will systematically debug and fix issues
+   - Continue until all tests pass
+6. Work through remaining tasks sequentially, keeping edits minimal and focused on the requested change.
+7. **After implementing changes, run tests with report and screenshot generation**:
    - Run \`npm test\` (or \`pnpm test\` / \`yarn test\` depending on package manager)
    - Tests will automatically generate HTML report in \`playwright-report/\` directory
    - Screenshots will be captured on test failures in \`test-results/\` directory
    - Review the HTML report at \`playwright-report/index.html\` to verify test results
-5. Confirm completion before updating statuses—make sure every item in \`tasks.md\` is finished.
-6. Update the checklist after all work is done so each task is marked \`- [x]\` and reflects reality.
-7. Reference \`spectest list\` or \`spectest show <item>\` when additional context is required.`;
+8. Confirm completion before updating statuses—make sure every item in \`tasks.md\` is finished.
+9. Update the checklist after all work is done so each task is marked \`- [x]\` and reflects reality.
+10. Reference \`spectest list\` or \`spectest show <item>\` when additional context is required.`;
 
 const applyReferences = `**Reference**
 - Use \`spectest show <id> --json --deltas-only\` if you need additional context from the proposal while implementing.`;

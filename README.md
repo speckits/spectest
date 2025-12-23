@@ -6,7 +6,7 @@
   </a>
   
 </p>
-<p align="center">Spec-driven automation test development for AI coding assistants.</p>
+<p align="center">Spec-driven automation testing for AI coding assistants.</p>
 <p align="center"><em>Forked from <a href="https://github.com/speckits/openspec">OpenSpec</a> and optimized for Playwright test automation</em></p>
 <p align="center">
   <a href="https://github.com/speckits/spectest/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/speckits/spectest/actions/workflows/ci.yml/badge.svg" /></a>
@@ -17,21 +17,21 @@
 
 # SpecTest
 
-**SpecTest** is a specialized fork of [OpenSpec](https://github.com/Fission-AI/OpenSpec), optimized for automation test development. It extends OpenSpec's spec-driven test development workflow with specialized instructions, prompts, and workflows for creating, planning, and maintaining automated tests—particularly with Playwright.
+**SpecTest** is a specialized fork of [OpenSpec](https://github.com/Fission-AI/OpenSpec), optimized for automation testing. It extends OpenSpec's spec-driven workflow with specialized instructions, prompts, and workflows for creating, planning, and maintaining automated tests—particularly with Playwright.
 
 **No API keys required.**
 
 ## About SpecTest
 
-SpecTest is inspired by and forked from [OpenSpec](https://github.com/Fission-AI/OpenSpec), an excellent general-purpose spec-driven development tool. While OpenSpec focuses on general software development, SpecTest specializes in automation test development, making it the ideal choice for teams building and maintaining test suites.
+SpecTest is inspired by and forked from [OpenSpec](https://github.com/Fission-AI/OpenSpec), an excellent general-purpose spec-driven development tool. While OpenSpec focuses on general software development, SpecTest specializes in automation testing, making it the ideal choice for teams building and maintaining test suites.
 
 ### Key Differences from OpenSpec
 
 | Feature | OpenSpec | SpecTest |
 |---------|----------|----------|
-| **Focus** | General software development | **Automation test development** |
-| **Workflows** | General change proposals | **Test planning, generation, healing, coverage** |
-| **Instructions** | General development guidance | **Playwright & automation test best practices** |
+| **Focus** | General software development | **Automation testing** |
+| **Workflows** | General change proposals | **Planning, generation, healing, coverage** |
+| **Instructions** | General development guidance | **Playwright & automation best practices** |
 | **Use Case** | Building features, APIs, apps | **Creating and maintaining test suites** |
 | **Package** | `@fission-ai/openspec` | `@speckit/spectest` |
 | **CLI** | `openspec` | `spectest` |
@@ -41,25 +41,25 @@ SpecTest is inspired by and forked from [OpenSpec](https://github.com/Fission-AI
 
 **Choose SpecTest if:**
 - ✅ You're building automation test suites (Playwright, Cypress, etc.)
-- ✅ You need specialized workflows for test planning and generation
+- ✅ You need specialized workflows for planning and generation
 - ✅ You want AI assistants optimized for test creation and maintenance
-- ✅ You're working on test coverage, test healing, and test quality
+- ✅ You're working on coverage, healing, and quality
 
 **Choose OpenSpec if:**
 - ✅ You're building general software (APIs, web apps, libraries)
 - ✅ You need a general-purpose spec-driven development workflow
 - ✅ You want the original, battle-tested tool
 
-Both tools share the same core spec-driven test development philosophy and workflow. SpecTest adds test-specific enhancements while maintaining full compatibility with OpenSpec's file structure and concepts.
+Both tools share the same core spec-driven philosophy and workflow. SpecTest adds test-specific enhancements while maintaining full compatibility with OpenSpec's file structure and concepts.
 
 ## Why SpecTest?
 
-AI coding assistants are powerful but unpredictable when test requirements live in chat history. SpecTest adds a lightweight specification workflow that locks test intent before test implementation, giving you deterministic, reviewable test outputs—especially for test development.
+AI coding assistants are powerful but unpredictable when test requirements live in chat history. SpecTest adds a lightweight specification workflow that locks test intent before implementation, giving you deterministic, reviewable outputs—especially for automation testing.
 
 Key outcomes:
 - Human and AI stakeholders agree on test specs before test implementation begins.
 - Structured change folders (proposals, tasks, and spec updates) keep test scope explicit and auditable.
-- Specialized workflows for test planning, generation, healing, and coverage analysis.
+- Specialized workflows for planning, generation, healing, and coverage analysis.
 - Works with the AI tools you already use: custom slash commands where supported, context rules everywhere else.
 - **Playwright-optimized**: Built-in workflows and best practices for Playwright test automation.
 
@@ -74,7 +74,7 @@ See the full comparison in [How SpecTest Compares](#how-spectest-compares).
 
 ## How It Works
 
-SpecTest follows the same proven workflow as OpenSpec, but with specialized support for test development:
+SpecTest follows the same proven workflow as OpenSpec, but with specialized support for automation testing:
 
 ```
 ┌────────────────────┐
@@ -105,11 +105,11 @@ SpecTest follows the same proven workflow as OpenSpec, but with specialized supp
 1. Draft a test proposal/plan that captures the test scenarios you need.
 2. Review the test plan with your AI assistant until everyone agrees.
 3. Generate Playwright tests from the approved test plan.
-4. Heal any failing tests using the test healing workflow.
+4. Heal any failing tests using the healing workflow.
 5. Archive the change to merge the approved test specs back into the source-of-truth.
 ```
 
-### For Test Development
+### For Automation Testing
 
 When working with tests, SpecTest provides specialized workflows:
 
@@ -218,7 +218,7 @@ Use `spectest/project.md` to define project-level test conventions, standards, t
 
 ### Create Your First Test Change
 
-Here's a real example showing the complete SpecTest workflow for test development. This works with any AI tool. Those with native slash commands will recognize the shortcuts automatically.
+Here's a real example showing the complete SpecTest workflow for automation testing. This works with any AI tool. Those with native slash commands will recognize the shortcuts automatically.
 
 #### 1. Draft the Test Plan
 Start by asking your AI to create a test plan:
@@ -259,7 +259,7 @@ You: The test plan looks good. Let's generate the Playwright tests.
      (Shortcut for tools with slash commands: /spectest:apply add-login-tests)
 
 AI:  I'll work through the tasks in the add-login-tests change.
-     *Uses test generation workflow to create Playwright tests from the test plan*
+     *Uses generation workflow to create Playwright tests from the test plan*
      *Executes steps in browser and generates Playwright test code*
      *Runs tests with report and screenshot generation*
      *Marks tasks complete: Task 1.1 ✓, Task 2.1 ✓, Task 2.2 ✓...*
@@ -271,12 +271,12 @@ AI:  I'll work through the tasks in the add-login-tests change.
 - Review the HTML report at `playwright-report/index.html` to verify test results
 
 #### 5. Heal Tests (if needed)
-If any tests fail, use the test healing workflow:
+If any tests fail, use the healing workflow:
 
 ```text
 You: Some tests are failing. Please fix them.
 
-AI:  I'll use the test healing workflow to debug and fix the failing tests.
+AI:  I'll use the healing workflow to debug and fix the failing tests.
      *Runs tests, identifies failures, debugs systematically, and fixes issues*
      *Verifies all tests pass*
 ```
@@ -368,16 +368,16 @@ The test suite MUST test error scenarios during login.
 ### AI-Generated Tasks (created in `spectest/changes/add-login-tests/tasks.md`):
 
 ```markdown
-## 1. Test Planning
-- [ ] 1.1 Create test plan for login scenarios
+## 1. Planning
+- [ ] 1.1 Create plan for login scenarios
 - [ ] 1.2 Identify test cases and edge cases
 
-## 2. Test Generation  
+## 2. Generation  
 - [ ] 2.1 Generate Playwright test for valid login
 - [ ] 2.2 Generate test for invalid credentials
 - [ ] 2.3 Generate test for empty form submission
 
-## 3. Test Execution & Healing
+## 3. Execution & Healing
 - [ ] 3.1 Run tests and fix any failures
 - [ ] 3.2 Verify all tests pass
 ```
@@ -401,7 +401,7 @@ Deltas are "patches" that show how test specs change:
 
 ## SpecTest's Automation Test Workflows
 
-SpecTest includes specialized workflows optimized for automation test development:
+SpecTest includes specialized workflows optimized for automation testing:
 
 ### Test Planning Workflow
 - **Explore & Analyze**: Navigate and explore web applications under test to understand user flows
@@ -428,12 +428,12 @@ These workflows are integrated into the main `spectest/AGENTS.md` template, maki
 ## How SpecTest Compares
 
 ### vs. OpenSpec
-SpecTest is a specialized fork of OpenSpec, optimized for automation test development. While OpenSpec excels at general software development, SpecTest adds:
+SpecTest is a specialized fork of OpenSpec, optimized for automation testing. While OpenSpec excels at general software development, SpecTest adds:
 - **Test-specific workflows**: Planning, generation, healing, and coverage analysis
 - **Playwright optimization**: Built-in best practices and patterns for Playwright tests
-- **Test-focused instructions**: AI assistants receive specialized guidance for test development
+- **Test-focused instructions**: AI assistants receive specialized guidance for automation testing
 
-**Choose SpecTest for test development, OpenSpec for general development.**
+**Choose SpecTest for automation testing, OpenSpec for general development.**
 
 ### vs. spec-kit
 SpecTest's two-folder model (`spectest/specs/` for the current test coverage, `spectest/changes/` for proposed test updates) keeps test state and diffs separate. This scales when you modify existing test suites or touch multiple test specs. spec-kit is strong for greenfield/0→1 but provides less structure for cross-spec updates and evolving test suites.
@@ -447,10 +447,10 @@ Without specs, AI coding assistants generate tests from vague prompts, often mis
 ## Team Adoption
 
 1. **Initialize SpecTest** – Run `spectest init` in your test project.
-2. **Start with test planning** – Ask your AI to create test plans for features to test or existing functionality to test.
-3. **Generate tests systematically** – Use the test generation workflow to create Playwright tests from test plans.
-4. **Maintain test quality** – Use test healing and coverage workflows to keep your test suite healthy.
-5. **Grow incrementally** – Each change archives into living test specs that document your test coverage.
+2. **Start with planning** – Ask your AI to create test plans for features to test or existing functionality to test.
+3. **Generate tests systematically** – Use the generation workflow to create Playwright tests from test plans.
+4. **Maintain test quality** – Use healing and coverage workflows to keep your test suite healthy.
+5. **Grow incrementally** – Each change archives into living specs that document your test coverage.
 6. **Stay flexible** – Different teammates can use Claude Code, CodeBuddy, Cursor, or any AGENTS.md-compatible tool while sharing the same test specs.
 
 Run `spectest update` whenever someone switches tools so your agents pick up the latest test-specific instructions and slash-command bindings.
@@ -466,7 +466,7 @@ Run `spectest update` whenever someone switches tools so your agents pick up the
 
 ## Acknowledgments
 
-SpecTest is a fork of [OpenSpec](https://github.com/speckits/openspec), created by the OpenSpec contributors. We are grateful for their excellent work on the original project, which inspired and enabled SpecTest. OpenSpec's spec-driven test development philosophy and architecture form the foundation of SpecTest.
+SpecTest is a fork of [OpenSpec](https://github.com/speckits/openspec), created by the OpenSpec contributors. We are grateful for their excellent work on the original project, which inspired and enabled SpecTest. OpenSpec's spec-driven philosophy and architecture form the foundation of SpecTest.
 
 **Thank you to the OpenSpec team and community for building such a great tool!**
 

@@ -5,38 +5,40 @@ export interface ProjectContext {
   conventions?: string;
 }
 
-export const projectTemplate = (context: ProjectContext = {}) => `# ${context.projectName || 'Project'} Context
+export const projectTemplate = (context: ProjectContext = {}) => `# ${context.projectName || 'Test Project'} Context
 
 ## Purpose
-${context.description || '[Describe your project\'s purpose and goals]'}
+${context.description || '[Describe your test project\'s purpose and goals - e.g., "Automated test suite for web application login and user management flows"]'}
 
 ## Tech Stack
-${context.techStack?.length ? context.techStack.map(tech => `- ${tech}`).join('\n') : '- [List your primary technologies]\n- [e.g., TypeScript, React, Node.js]'}
+${context.techStack?.length ? context.techStack.map(tech => `- ${tech}`).join('\n') : '- [List your automation technologies]\n- [e.g., Playwright, TypeScript, Node.js]'}
 
-## Project Conventions
+## Test Project Conventions
 
-### Code Style
-[Describe your code style preferences, formatting rules, and naming conventions]
+### Test Code Style
+[Describe your test code style preferences, formatting rules, and naming conventions for test files]
 
-### Architecture Patterns
-[Document your architectural decisions and patterns]
+### Test Architecture Patterns
+[Document your test architecture decisions and patterns - e.g., page object model, test fixtures, test data management]
 
 ### Testing Strategy
-[Explain your testing approach and requirements]
-- Test automation framework: Playwright
-- Test spec format: SpecTest (human-readable test specs)
-- Test generation: Use Playwright Test Agents (planner, generator, healer)
-- Test maintenance: Automated healing for failing tests
+[Explain your automation approach and requirements]
+- Framework: Playwright
+- Spec format: SpecTest (human-readable test specs)
+- Generation: Use Playwright Test Agents (planner, generator, healer)
+- Maintenance: Automated healing for failing tests
+- Planning: Create test plans before generating tests
+- Coverage: Focus on critical user flows and edge cases
 
 ### Git Workflow
-[Describe your branching strategy and commit conventions]
+[Describe your branching strategy and commit conventions for test changes]
 
 ## Domain Context
-[Add domain-specific knowledge that AI assistants need to understand]
+[Add domain-specific knowledge about the application under test that AI assistants need to understand for planning and generation]
 
 ## Important Constraints
-[List any technical, business, or regulatory constraints]
+[List any technical, business, or regulatory constraints affecting automation - e.g., data requirements, environment limitations, performance targets]
 
-## External Dependencies
-[Document key external services, APIs, or systems]
+## Application Under Test
+[Document key external services, APIs, or systems that the application under test depends on - needed for setup and mocking]
 `;

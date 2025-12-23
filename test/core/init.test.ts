@@ -193,21 +193,21 @@ describe('InitCommand', () => {
 
       const proposalContent = await fs.readFile(wsProposal, 'utf-8');
       expect(proposalContent).toContain('---');
-      expect(proposalContent).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
+      expect(proposalContent).toContain('description: Scaffold a new test change and validate strictly.');
       expect(proposalContent).toContain('auto_execution_mode: 3');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
 
       const applyContent = await fs.readFile(wsApply, 'utf-8');
       expect(applyContent).toContain('---');
-      expect(applyContent).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
+      expect(applyContent).toContain('description: Implement an approved test change and keep tasks in sync.');
       expect(applyContent).toContain('auto_execution_mode: 3');
       expect(applyContent).toContain('<!-- SPECTEST:START -->');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(wsArchive, 'utf-8');
       expect(archiveContent).toContain('---');
-      expect(archiveContent).toContain('description: Archive a deployed SpecTest test change and update test specs.');
+      expect(archiveContent).toContain('description: Archive a deployed test change and update test specs.');
       expect(archiveContent).toContain('auto_execution_mode: 3');
       expect(archiveContent).toContain('<!-- SPECTEST:START -->');
       expect(archiveContent).toContain('Run `spectest archive <id> --yes`');
@@ -237,21 +237,21 @@ describe('InitCommand', () => {
 
       const proposalContent = await fs.readFile(agProposal, 'utf-8');
       expect(proposalContent).toContain('---');
-      expect(proposalContent).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
+      expect(proposalContent).toContain('description: Scaffold a new test change and validate strictly.');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
       expect(proposalContent).not.toContain('auto_execution_mode');
 
       const applyContent = await fs.readFile(agApply, 'utf-8');
       expect(applyContent).toContain('---');
-      expect(applyContent).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
+      expect(applyContent).toContain('description: Implement an approved test change and keep tasks in sync.');
       expect(applyContent).toContain('<!-- SPECTEST:START -->');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
       expect(applyContent).not.toContain('auto_execution_mode');
 
       const archiveContent = await fs.readFile(agArchive, 'utf-8');
       expect(archiveContent).toContain('---');
-      expect(archiveContent).toContain('description: Archive a deployed SpecTest test change and update test specs.');
+      expect(archiveContent).toContain('description: Archive a deployed test change and update test specs.');
       expect(archiveContent).toContain('<!-- SPECTEST:START -->');
       expect(archiveContent).toContain('Run `spectest archive <id> --yes`');
       expect(archiveContent).not.toContain('auto_execution_mode');
@@ -304,7 +304,7 @@ describe('InitCommand', () => {
 
       const applyContent = await fs.readFile(claudeApply, 'utf-8');
       expect(applyContent).toContain('name: SpecTest: Apply');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(claudeArchive, 'utf-8');
       expect(archiveContent).toContain('name: SpecTest: Archive');
@@ -342,7 +342,7 @@ describe('InitCommand', () => {
 
       const applyContent = await fs.readFile(cursorApply, 'utf-8');
       expect(applyContent).toContain('id: spectest-apply');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(cursorArchive, 'utf-8');
       expect(archiveContent).toContain('name: /spectest-archive');
@@ -372,18 +372,18 @@ describe('InitCommand', () => {
       expect(await fileExists(geminiArchive)).toBe(true);
 
       const proposalContent = await fs.readFile(geminiProposal, 'utf-8');
-      expect(proposalContent).toContain('description = "Scaffold a new SpecTest test change and validate strictly."');
+      expect(proposalContent).toContain('description = "Scaffold a new test change and validate strictly."');
       expect(proposalContent).toContain('prompt = """');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
       expect(proposalContent).toContain('<!-- SPECTEST:END -->');
 
       const applyContent = await fs.readFile(geminiApply, 'utf-8');
-      expect(applyContent).toContain('description = "Implement an approved SpecTest test change and keep tasks in sync."');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('description = "Implement an approved test change and keep tasks in sync."');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(geminiArchive, 'utf-8');
-      expect(archiveContent).toContain('description = "Archive a deployed SpecTest test change and update test specs."');
+      expect(archiveContent).toContain('description = "Archive a deployed test change and update test specs."');
       expect(archiveContent).toContain('spectest archive <id>');
     });
 
@@ -438,17 +438,17 @@ describe('InitCommand', () => {
       expect(await fileExists(iflowArchive)).toBe(true);
 
       const proposalContent = await fs.readFile(iflowProposal, 'utf-8');
-      expect(proposalContent).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
+      expect(proposalContent).toContain('description: Scaffold a new test change and validate strictly.');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
       expect(proposalContent).toContain('<!-- SPECTEST:END -->');
 
       const applyContent = await fs.readFile(iflowApply, 'utf-8');
-      expect(applyContent).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('description: Implement an approved test change and keep tasks in sync.');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(iflowArchive, 'utf-8');
-      expect(archiveContent).toContain('description: Archive a deployed SpecTest test change and update test specs.');
+      expect(archiveContent).toContain('description: Archive a deployed test change and update test specs.');
       expect(archiveContent).toContain('spectest archive <id>');
     });
 
@@ -494,21 +494,21 @@ describe('InitCommand', () => {
       const proposalContent = await fs.readFile(openCodeProposal, 'utf-8');
       expect(proposalContent).not.toContain('agent:');
       expect(proposalContent).toContain(
-        'description: Scaffold a new SpecTest test change and validate strictly.'
+        'description: Scaffold a new test change and validate strictly.'
       );
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
 
       const applyContent = await fs.readFile(openCodeApply, 'utf-8');
       expect(applyContent).not.toContain('agent:');
       expect(applyContent).toContain(
-        'description: Implement an approved SpecTest test change and keep tasks in sync.'
+        'description: Implement an approved test change and keep tasks in sync.'
       );
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(openCodeArchive, 'utf-8');
       expect(archiveContent).not.toContain('agent:');
       expect(archiveContent).toContain(
-        'description: Archive a deployed SpecTest test change and update test specs.'
+        'description: Archive a deployed test change and update test specs.'
       );
       expect(archiveContent).toContain('spectest list --specs');
     });
@@ -543,16 +543,16 @@ describe('InitCommand', () => {
       expect(qwenConfigContent).toContain('<!-- SPECTEST:END -->');
 
       const proposalContent = await fs.readFile(proposalPath, 'utf-8');
-      expect(proposalContent).toContain('description = "Scaffold a new SpecTest test change and validate strictly."');
+      expect(proposalContent).toContain('description = "Scaffold a new test change and validate strictly."');
       expect(proposalContent).toContain('prompt = """');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
 
       const applyContent = await fs.readFile(applyPath, 'utf-8');
-      expect(applyContent).toContain('description = "Implement an approved SpecTest test change and keep tasks in sync."');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('description = "Implement an approved test change and keep tasks in sync."');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(archivePath, 'utf-8');
-      expect(archiveContent).toContain('description = "Archive a deployed SpecTest test change and update test specs."');
+      expect(archiveContent).toContain('description = "Archive a deployed test change and update test specs."');
       expect(archiveContent).toContain('spectest archive <id>');
     });
 
@@ -597,18 +597,18 @@ describe('InitCommand', () => {
 
       const proposalContent = await fs.readFile(clineProposal, 'utf-8');
       expect(proposalContent).toContain('# SpecTest: Proposal');
-      expect(proposalContent).toContain('Scaffold a new SpecTest test change and validate strictly.');
+      expect(proposalContent).toContain('Scaffold a new test change and validate strictly.');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
 
       const applyContent = await fs.readFile(clineApply, 'utf-8');
       expect(applyContent).toContain('# SpecTest: Apply');
-      expect(applyContent).toContain('Implement an approved SpecTest test change and keep tasks in sync.');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Implement an approved test change and keep tasks in sync.');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(clineArchive, 'utf-8');
       expect(archiveContent).toContain('# SpecTest: Archive');
-      expect(archiveContent).toContain('Archive a deployed SpecTest test change and update test specs.');
+      expect(archiveContent).toContain('Archive a deployed test change and update test specs.');
       expect(archiveContent).toContain('spectest archive <id>');
     });
 
@@ -635,8 +635,8 @@ describe('InitCommand', () => {
       expect(await fileExists(factoryArchive)).toBe(true);
 
       const proposalContent = await fs.readFile(factoryProposal, 'utf-8');
-      expect(proposalContent).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
-      expect(proposalContent).toContain('argument-hint: request or feature description');
+      expect(proposalContent).toContain('description: Scaffold a new test change and validate strictly.');
+      expect(proposalContent).toContain('argument-hint: test change request or description');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(
         /<!-- SPECTEST:START -->([\s\S]*?)<!-- SPECTEST:END -->/u.exec(
@@ -645,9 +645,9 @@ describe('InitCommand', () => {
       ).toContain('$ARGUMENTS');
 
       const applyContent = await fs.readFile(factoryApply, 'utf-8');
-      expect(applyContent).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
+      expect(applyContent).toContain('description: Implement an approved test change and keep tasks in sync.');
       expect(applyContent).toContain('argument-hint: change-id');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
       expect(
         /<!-- SPECTEST:START -->([\s\S]*?)<!-- SPECTEST:END -->/u.exec(
           applyContent
@@ -655,7 +655,7 @@ describe('InitCommand', () => {
       ).toContain('$ARGUMENTS');
 
       const archiveContent = await fs.readFile(factoryArchive, 'utf-8');
-      expect(archiveContent).toContain('description: Archive a deployed SpecTest test change and update test specs.');
+      expect(archiveContent).toContain('description: Archive a deployed test change and update test specs.');
       expect(archiveContent).toContain('argument-hint: change-id');
       expect(archiveContent).toContain('spectest archive <id> --yes');
       expect(
@@ -688,20 +688,20 @@ describe('InitCommand', () => {
       expect(await fileExists(archivePath)).toBe(true);
 
       const proposalContent = await fs.readFile(proposalPath, 'utf-8');
-      expect(proposalContent).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
-      expect(proposalContent).toContain('argument-hint: request or feature description');
+      expect(proposalContent).toContain('description: Scaffold a new test change and validate strictly.');
+      expect(proposalContent).toContain('argument-hint: test change request or description');
       expect(proposalContent).toContain('$ARGUMENTS');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
 
       const applyContent = await fs.readFile(applyPath, 'utf-8');
-      expect(applyContent).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
+      expect(applyContent).toContain('description: Implement an approved test change and keep tasks in sync.');
       expect(applyContent).toContain('argument-hint: change-id');
       expect(applyContent).toContain('$ARGUMENTS');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(archivePath, 'utf-8');
-      expect(archiveContent).toContain('description: Archive a deployed SpecTest test change and update test specs.');
+      expect(archiveContent).toContain('description: Archive a deployed test change and update test specs.');
       expect(archiveContent).toContain('argument-hint: change-id');
       expect(archiveContent).toContain('$ARGUMENTS');
       expect(archiveContent).toContain('spectest archive <id> --yes');
@@ -735,7 +735,7 @@ describe('InitCommand', () => {
       expect(proposalContent).not.toContain('---\n');
 
       const applyContent = await fs.readFile(applyPath, 'utf-8');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
       expect(applyContent).not.toContain('---\n');
 
       const archiveContent = await fs.readFile(archivePath, 'utf-8');
@@ -767,20 +767,20 @@ describe('InitCommand', () => {
 
       const proposalContent = await fs.readFile(proposalPath, 'utf-8');
       expect(proposalContent).toContain('---');
-      expect(proposalContent).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
+      expect(proposalContent).toContain('description: Scaffold a new test change and validate strictly.');
       expect(proposalContent).toContain('$ARGUMENTS');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
 
       const applyContent = await fs.readFile(applyPath, 'utf-8');
       expect(applyContent).toContain('---');
-      expect(applyContent).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
+      expect(applyContent).toContain('description: Implement an approved test change and keep tasks in sync.');
       expect(applyContent).toContain('$ARGUMENTS');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(archivePath, 'utf-8');
       expect(archiveContent).toContain('---');
-      expect(archiveContent).toContain('description: Archive a deployed SpecTest test change and update test specs.');
+      expect(archiveContent).toContain('description: Archive a deployed test change and update test specs.');
       expect(archiveContent).toContain('$ARGUMENTS');
       expect(archiveContent).toContain('spectest archive <id> --yes');
     });
@@ -1018,14 +1018,14 @@ describe('InitCommand', () => {
 
       const proposalContent = await fs.readFile(proposalPath, 'utf-8');
       expect(proposalContent).toContain('---');
-      expect(proposalContent).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
+      expect(proposalContent).toContain('description: Scaffold a new test change and validate strictly.');
       expect(proposalContent).toContain('$ARGUMENTS');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
 
       const applyContent = await fs.readFile(applyPath, 'utf-8');
       expect(applyContent).toContain('---');
-      expect(applyContent).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
+      expect(applyContent).toContain('description: Implement an approved test change and keep tasks in sync.');
       expect(applyContent).toContain('$ARGUMENTS');
       expect(applyContent).toContain('<!-- SPECTEST:START -->');
     });
@@ -1066,20 +1066,20 @@ describe('InitCommand', () => {
 
       const proposalContent = await fs.readFile(auggieProposal, 'utf-8');
       expect(proposalContent).toContain('---');
-      expect(proposalContent).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
-      expect(proposalContent).toContain('argument-hint: feature description or request');
+      expect(proposalContent).toContain('description: Scaffold a new test change and validate strictly.');
+      expect(proposalContent).toContain('argument-hint: test change request or description');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
 
       const applyContent = await fs.readFile(auggieApply, 'utf-8');
       expect(applyContent).toContain('---');
-      expect(applyContent).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
+      expect(applyContent).toContain('description: Implement an approved test change and keep tasks in sync.');
       expect(applyContent).toContain('argument-hint: change-id');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(auggieArchive, 'utf-8');
       expect(archiveContent).toContain('---');
-      expect(archiveContent).toContain('description: Archive a deployed SpecTest test change and update test specs.');
+      expect(archiveContent).toContain('description: Archive a deployed test change and update test specs.');
       expect(archiveContent).toContain('argument-hint: change-id');
       expect(archiveContent).toContain('spectest archive <id> --yes');
     });
@@ -1121,7 +1121,7 @@ describe('InitCommand', () => {
       const proposalContent = await fs.readFile(codeBuddyProposal, 'utf-8');
       expect(proposalContent).toContain('---');
       expect(proposalContent).toContain('name: SpecTest: Proposal');
-      expect(proposalContent).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
+      expect(proposalContent).toContain('description: Scaffold a new test change and validate strictly.');
       expect(proposalContent).toContain('category: SpecTest');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
@@ -1129,13 +1129,13 @@ describe('InitCommand', () => {
       const applyContent = await fs.readFile(codeBuddyApply, 'utf-8');
       expect(applyContent).toContain('---');
       expect(applyContent).toContain('name: SpecTest: Apply');
-      expect(applyContent).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('description: Implement an approved test change and keep tasks in sync.');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(codeBuddyArchive, 'utf-8');
       expect(archiveContent).toContain('---');
       expect(archiveContent).toContain('name: SpecTest: Archive');
-      expect(archiveContent).toContain('description: Archive a deployed SpecTest test change and update test specs.');
+      expect(archiveContent).toContain('description: Archive a deployed test change and update test specs.');
       expect(archiveContent).toContain('spectest archive <id> --yes');
     });
 
@@ -1209,7 +1209,7 @@ describe('InitCommand', () => {
       const proposalContent = await fs.readFile(crushProposal, 'utf-8');
       expect(proposalContent).toContain('---');
       expect(proposalContent).toContain('name: SpecTest: Proposal');
-      expect(proposalContent).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
+      expect(proposalContent).toContain('description: Scaffold a new test change and validate strictly.');
       expect(proposalContent).toContain('category: SpecTest');
       expect(proposalContent).toContain('tags: [spectest, test-change]');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
@@ -1218,15 +1218,15 @@ describe('InitCommand', () => {
       const applyContent = await fs.readFile(crushApply, 'utf-8');
       expect(applyContent).toContain('---');
       expect(applyContent).toContain('name: SpecTest: Apply');
-      expect(applyContent).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
+      expect(applyContent).toContain('description: Implement an approved test change and keep tasks in sync.');
       expect(applyContent).toContain('category: SpecTest');
       expect(applyContent).toContain('tags: [spectest, apply]');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(crushArchive, 'utf-8');
       expect(archiveContent).toContain('---');
       expect(archiveContent).toContain('name: SpecTest: Archive');
-      expect(archiveContent).toContain('description: Archive a deployed SpecTest test change and update test specs.');
+      expect(archiveContent).toContain('description: Archive a deployed test change and update test specs.');
       expect(archiveContent).toContain('category: SpecTest');
       expect(archiveContent).toContain('tags: [spectest, archive]');
       expect(archiveContent).toContain('spectest archive <id> --yes');
@@ -1268,20 +1268,20 @@ describe('InitCommand', () => {
 
       const proposalContent = await fs.readFile(costrictProposal, 'utf-8');
       expect(proposalContent).toContain('---');
-      expect(proposalContent).toContain('description: "Scaffold a new SpecTest test change and validate strictly."');
-      expect(proposalContent).toContain('argument-hint: feature description or request');
+      expect(proposalContent).toContain('description: "Scaffold a new test change and validate strictly."');
+      expect(proposalContent).toContain('argument-hint: test change request or description');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
 
       const applyContent = await fs.readFile(costrictApply, 'utf-8');
       expect(applyContent).toContain('---');
-      expect(applyContent).toContain('description: "Implement an approved SpecTest test change and keep tasks in sync."');
+      expect(applyContent).toContain('description: "Implement an approved test change and keep tasks in sync."');
       expect(applyContent).toContain('argument-hint: change-id');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(costrictArchive, 'utf-8');
       expect(archiveContent).toContain('---');
-      expect(archiveContent).toContain('description: "Archive a deployed SpecTest test change and update test specs."');
+      expect(archiveContent).toContain('description: "Archive a deployed test change and update test specs."');
       expect(archiveContent).toContain('argument-hint: change-id');
       expect(archiveContent).toContain('spectest archive <id> --yes');
     });
@@ -1326,7 +1326,7 @@ describe('InitCommand', () => {
 
       const applyContent = await fs.readFile(rooApply, 'utf-8');
       expect(applyContent).toContain('# SpecTest: Apply');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(rooArchive, 'utf-8');
       expect(archiveContent).toContain('# SpecTest: Archive');
@@ -1370,7 +1370,7 @@ describe('InitCommand', () => {
       const proposalContent = await fs.readFile(qoderProposal, 'utf-8');
       expect(proposalContent).toContain('---');
       expect(proposalContent).toContain('name: SpecTest: Proposal');
-      expect(proposalContent).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
+      expect(proposalContent).toContain('description: Scaffold a new test change and validate strictly.');
       expect(proposalContent).toContain('category: SpecTest');
       expect(proposalContent).toContain('<!-- SPECTEST:START -->');
       expect(proposalContent).toContain('**Guardrails**');
@@ -1378,13 +1378,13 @@ describe('InitCommand', () => {
       const applyContent = await fs.readFile(qoderApply, 'utf-8');
       expect(applyContent).toContain('---');
       expect(applyContent).toContain('name: SpecTest: Apply');
-      expect(applyContent).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
-      expect(applyContent).toContain('Work through tasks sequentially');
+      expect(applyContent).toContain('description: Implement an approved test change and keep tasks in sync.');
+      expect(applyContent).toContain('Track these steps as TODOs and complete them one by one.');
 
       const archiveContent = await fs.readFile(qoderArchive, 'utf-8');
       expect(archiveContent).toContain('---');
       expect(archiveContent).toContain('name: SpecTest: Archive');
-      expect(archiveContent).toContain('description: Archive a deployed SpecTest test change and update test specs.');
+      expect(archiveContent).toContain('description: Archive a deployed test change and update test specs.');
       expect(archiveContent).toContain('spectest archive <id> --yes');
     });
 

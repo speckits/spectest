@@ -155,7 +155,7 @@ Old slash content
       '.qwen/commands/spectest-apply.toml'
     );
     await fs.mkdir(path.dirname(applyPath), { recursive: true });
-    const initialContent = `description = "Implement an approved SpecTest change and keep tasks in sync."
+    const initialContent = `description = "Implement an approved test change and keep tasks in sync."
 
 prompt = """
 <!-- SPECTEST:START -->
@@ -170,10 +170,10 @@ Old body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(applyPath, 'utf-8');
-    expect(updated).toContain('description = "Implement an approved SpecTest change and keep tasks in sync."');
+    expect(updated).toContain('description = "Implement an approved test change and keep tasks in sync."');
     expect(updated).toContain('prompt = """');
     expect(updated).toContain('<!-- SPECTEST:START -->');
-    expect(updated).toContain('Work through tasks sequentially');
+    expect(updated).toContain('Track these steps as TODOs and complete them one by one.');
     expect(updated).not.toContain('Old body');
 
     const [logMessage] = consoleSpy.mock.calls[0];
@@ -210,7 +210,7 @@ Old content
     await updateCommand.execute(testDir);
 
     const updatedApply = await fs.readFile(applyPath, 'utf-8');
-    expect(updatedApply).toContain('Work through tasks sequentially');
+    expect(updatedApply).toContain('Track these steps as TODOs and complete them one by one.');
     expect(updatedApply).not.toContain('Old content');
 
     const proposalPath = path.join(
@@ -302,7 +302,7 @@ More rules after.`;
     await fs.mkdir(path.dirname(proposalPath), { recursive: true });
     const initialContent = `# SpecTest: Proposal
 
-Scaffold a new SpecTest test change and validate strictly.
+Scaffold a new test change and validate strictly.
 
 <!-- SPECTEST:START -->
 Old slash content
@@ -353,7 +353,7 @@ Old body
 
     const updated = await fs.readFile(cursorPath, 'utf-8');
     expect(updated).toContain('id: spectest-apply');
-    expect(updated).toContain('Work through tasks sequentially');
+    expect(updated).toContain('Track these steps as TODOs and complete them one by one.');
     expect(updated).not.toContain('Old body');
 
     const [logMessage] = consoleSpy.mock.calls[0];
@@ -391,7 +391,7 @@ Old body
 
     const updated = await fs.readFile(openCodePath, 'utf-8');
     expect(updated).toContain('id: spectest-apply');
-    expect(updated).toContain('Work through tasks sequentially');
+    expect(updated).toContain('Track these steps as TODOs and complete them one by one.');
     expect(updated).not.toContain('Old body');
 
     const [logMessage] = consoleSpy.mock.calls[0];
@@ -422,7 +422,7 @@ Old body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(kilocodePath, 'utf-8');
-    expect(updated).toContain('Work through tasks sequentially');
+    expect(updated).toContain('Track these steps as TODOs and complete them one by one.');
     expect(updated).not.toContain('Old body');
     expect(updated.startsWith('<!-- SPECTEST:START -->')).toBe(true);
 
@@ -452,7 +452,7 @@ Old body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(wsPath, 'utf-8');
-    expect(updated).toContain('Work through tasks sequentially');
+    expect(updated).toContain('Track these steps as TODOs and complete them one by one.');
     expect(updated).not.toContain('Old body');
     expect(updated).toContain('## SpecTest: Apply (Windsurf)');
 
@@ -470,7 +470,7 @@ Old body
     );
     await fs.mkdir(path.dirname(agPath), { recursive: true });
     const initialContent = `---
-description: Implement an approved SpecTest change and keep tasks in sync.
+description: Implement an approved test change and keep tasks in sync.
 ---
 
 <!-- SPECTEST:START -->
@@ -483,9 +483,9 @@ Old body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(agPath, 'utf-8');
-    expect(updated).toContain('Work through tasks sequentially');
+    expect(updated).toContain('Track these steps as TODOs and complete them one by one.');
     expect(updated).not.toContain('Old body');
-    expect(updated).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
+    expect(updated).toContain('description: Implement an approved test change and keep tasks in sync.');
     expect(updated).not.toContain('auto_execution_mode: 3');
 
     const [logMessage] = consoleSpy.mock.calls[0];
@@ -509,10 +509,10 @@ Old body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(codexPath, 'utf-8');
-    expect(updated).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
+    expect(updated).toContain('description: Implement an approved test change and keep tasks in sync.');
     expect(updated).toContain('argument-hint: change-id');
     expect(updated).toContain('$ARGUMENTS');
-    expect(updated).toContain('Work through tasks sequentially');
+    expect(updated).toContain('Track these steps as TODOs and complete them one by one.');
     expect(updated).not.toContain('Old body');
     expect(updated).not.toContain('Old description');
 
@@ -560,7 +560,7 @@ Old body
     );
     await fs.mkdir(path.dirname(ghPath), { recursive: true });
     const initialContent = `---
-description: Implement an approved SpecTest change and keep tasks in sync.
+description: Implement an approved test change and keep tasks in sync.
 ---
 
 $ARGUMENTS
@@ -574,9 +574,9 @@ Old body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(ghPath, 'utf-8');
-    expect(updated).toContain('description: Implement an approved SpecTest test change and keep tasks in sync.');
+    expect(updated).toContain('description: Implement an approved test change and keep tasks in sync.');
     expect(updated).toContain('$ARGUMENTS');
-    expect(updated).toContain('Work through tasks sequentially');
+    expect(updated).toContain('Track these steps as TODOs and complete them one by one.');
     expect(updated).not.toContain('Old body');
 
     const [logMessage] = consoleSpy.mock.calls[0];
@@ -622,7 +622,7 @@ Old body
       '.gemini/commands/spectest/proposal.toml'
     );
     await fs.mkdir(path.dirname(geminiProposal), { recursive: true });
-    const initialContent = `description = "Scaffold a new SpecTest test change and validate strictly."
+    const initialContent = `description = "Scaffold a new test change and validate strictly."
 
 prompt = """
 <!-- SPECTEST:START -->
@@ -637,7 +637,7 @@ Old Gemini body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(geminiProposal, 'utf-8');
-    expect(updated).toContain('description = "Scaffold a new SpecTest test change and validate strictly."');
+    expect(updated).toContain('description = "Scaffold a new test change and validate strictly."');
     expect(updated).toContain('prompt = """');
     expect(updated).toContain('<!-- SPECTEST:START -->');
     expect(updated).toContain('**Guardrails**');
@@ -670,7 +670,7 @@ Old Gemini body
       '.iflow/commands/spectest-proposal.md'
     );
     await fs.mkdir(path.dirname(iflowProposal), { recursive: true });
-    const initialContent = `description: Scaffold a new SpecTest test change and validate strictly."
+    const initialContent = `description: Scaffold a new test change and validate strictly."
 
 prompt = """
 <!-- SPECTEST:START -->
@@ -685,7 +685,7 @@ Old IFlow body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(iflowProposal, 'utf-8');
-    expect(updated).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
+    expect(updated).toContain('description: Scaffold a new test change and validate strictly.');
     expect(updated).toContain('<!-- SPECTEST:START -->');
     expect(updated).toContain('**Guardrails**');
     expect(updated).toContain('<!-- SPECTEST:END -->');
@@ -718,8 +718,8 @@ Old IFlow body
     );
     await fs.mkdir(path.dirname(factoryPath), { recursive: true });
     const initialContent = `---
-description: Scaffold a new SpecTest test change and validate strictly.
-argument-hint: request or feature description
+description: Scaffold a new test change and validate strictly.
+argument-hint: test change request or description
 ---
 
 <!-- SPECTEST:START -->
@@ -732,8 +732,8 @@ Old body
     await updateCommand.execute(testDir);
 
     const updated = await fs.readFile(factoryPath, 'utf-8');
-    expect(updated).toContain('description: Scaffold a new SpecTest test change and validate strictly.');
-    expect(updated).toContain('argument-hint: request or feature description');
+    expect(updated).toContain('description: Scaffold a new test change and validate strictly.');
+    expect(updated).toContain('argument-hint: test change request or description');
     expect(
       /<!-- SPECTEST:START -->([\s\S]*?)<!-- SPECTEST:END -->/u.exec(updated)?.[1]
     ).toContain('$ARGUMENTS');
@@ -788,7 +788,7 @@ Old body
     );
     await fs.mkdir(path.dirname(aqPath), { recursive: true });
     const initialContent = `---
-description: Implement an approved SpecTest change and keep tasks in sync.
+description: Implement an approved test change and keep tasks in sync.
 ---
 
 The user wants to apply the following change. Use the spectest instructions to implement the approved change.
@@ -854,7 +854,7 @@ Old body
     );
     await fs.mkdir(path.dirname(auggiePath), { recursive: true });
     const initialContent = `---
-description: Implement an approved SpecTest change and keep tasks in sync.
+description: Implement an approved test change and keep tasks in sync.
 argument-hint: change-id
 ---
 <!-- SPECTEST:START -->

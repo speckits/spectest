@@ -19,9 +19,9 @@ const FILE_PATHS: Record<SlashCommandId, string> = {
 };
 
 const DESCRIPTIONS: Record<SlashCommandId, string> = {
-  proposal: 'Scaffold a new SpecTest test change and validate strictly.',
-  apply: 'Implement an approved SpecTest test change and keep tasks in sync.',
-  archive: 'Archive a deployed SpecTest test change and update test specs.'
+  proposal: 'Scaffold a new test change and validate strictly.',
+  apply: 'Implement an approved test change and keep tasks in sync.',
+  archive: 'Archive a deployed test change and update test specs.'
 };
 
 /**
@@ -29,9 +29,9 @@ const DESCRIPTIONS: Record<SlashCommandId, string> = {
  * by creating the necessary slash command files in the .qwen/commands directory.
  * 
  * The slash commands include:
- * - /spectest-proposal: Create a SpecTest test change proposal
- * - /spectest-apply: Apply an approved SpecTest test change
- * - /spectest-archive: Archive a deployed SpecTest test change
+ * - /spectest-proposal: Create a test change proposal
+ * - /spectest-apply: Apply an approved test change
+ * - /spectest-archive: Archive a deployed test change
  */
 export class QwenSlashCommandConfigurator extends TomlSlashCommandConfigurator {
   /** Unique identifier for the Qwen tool */

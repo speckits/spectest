@@ -1,7 +1,7 @@
 {
   "name": "@speckit/spectest",
   "version": "0.1.2",
-  "description": "Spec-first Playwright test automation framework with AI-powered test generation",
+  "description": "Spec-driven automation testing for AI coding assistants.",
   "keywords": [
     "spectest",
     "playwright",

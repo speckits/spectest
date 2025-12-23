@@ -5,7 +5,7 @@ import { FileSystemUtils } from "./file-system.js";
 
 /**
  * Scaffold Playwright configuration and fixture files if they don't exist.
- * This should be called during apply workflow when Playwright is needed for test automation.
+ * This should be called during apply workflow when Playwright is needed.
  *
  * @param projectPath - Path to the project root (defaults to current directory)
  */
@@ -27,6 +27,8 @@ export async function scaffoldPlaywrightFiles(
         test: "playwright test",
         "test:ui": "playwright test --ui",
         "test:debug": "playwright test --debug",
+        "test:headed": "playwright test --headed",
+        "test:codegen": "playwright codegen",
         report: "playwright show-report",
       },
       dependencies: {
@@ -39,7 +41,7 @@ export async function scaffoldPlaywrightFiles(
         zod: "^4.2.1",
       },
       devDependencies: {
-        "@playwright/test": "^1.40.0",
+        "@playwright/test": "^1.48.0",
       },
     };
     await FileSystemUtils.writeFile(
@@ -65,7 +67,7 @@ export async function scaffoldPlaywrightFiles(
         if (!packageJson.devDependencies) {
           packageJson.devDependencies = {};
         }
-        packageJson.devDependencies["@playwright/test"] = "^1.40.0";
+        packageJson.devDependencies["@playwright/test"] = "^1.48.0";
 
         // Add test scripts if not present
         if (!packageJson.scripts) {
@@ -100,48 +102,89 @@ export async function scaffoldPlaywrightFiles(
     const configContent = `import { defineConfig, devices } from '@playwright/test';
 
 /**
- * See https://playwright.dev/docs/test-configuration.
+ * Playwright Test Configuration for SpecTest
+ * 
+ * This configuration is optimized for test workflows including:
+ * - Test planning and generation
+ * - Test execution with comprehensive reporting
+ * - Test healing and debugging
+ * - Coverage analysis
+ * 
+ * See https://playwright.dev/docs/test-configuration for full documentation.
  */
 export default defineConfig({
+  // Directory containing test files
   testDir: './tests',
+  
+  // Output directory for test results (screenshots, videos, traces)
+  outputDir: './test-results',
+  
   /* Run tests in files in parallel */
   fullyParallel: true,
+  
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
+  
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
+  
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'list',
+  
+  /* Reporter configuration - HTML report for detailed analysis, list for console output */
+  reporter: [
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
+    ['list'],
+  ],
+  
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like \`await page.goto('/')\`. */
+    /* Uncomment and set your application URL for relative navigation */
     // baseURL: 'http://127.0.0.1:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    /* Traces help with debugging failed tests and test healing */
     trace: 'on-first-retry',
 
-    /* Take screenshot on failure */
+    /* Take screenshot on failure - essential for test healing and debugging */
     screenshot: 'on',
 
-    /* Record video on failure */
+    /* Record video on failure - useful for understanding test failures */
     video: 'retain-on-failure',
+    
+    /* Action timeout - maximum time for actions like click, fill, etc. */
+    actionTimeout: 10_000,
+    
+    /* Navigation timeout - maximum time for page navigation */
+    navigationTimeout: 30_000,
   },
 
   /* Configure projects for major browsers */
+  /* Add more browsers as needed: firefox, webkit, etc. */
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    // Uncomment to add more browsers:
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
   ],
 
   /* Run your local dev server before starting the tests */
+  /* Uncomment and configure if your tests require a running server */
   // webServer: {
   //   command: 'npm run start',
   //   url: 'http://127.0.0.1:3000',
   //   reuseExistingServer: !process.env.CI,
+  //   timeout: 120_000,
   // },
 });
 `;
@@ -157,15 +200,40 @@ export default defineConfig({
   // Create fixtures.ts if it doesn't exist
   const fixturesPath = path.join(testsDir, "fixtures.ts");
   if (!(await FileSystemUtils.fileExists(fixturesPath))) {
-    const fixturesContent = `import { test as base } from '@playwright/test';
+    const fixturesContent = `import { test as base, Page } from '@playwright/test';
 
-// Extend base test with custom fixtures
+/**
+ * Custom Playwright Test Fixtures
+ * 
+ * Extend the base test with custom fixtures for test workflows.
+ * These fixtures can be used across all test files to maintain consistency
+ * and reduce code duplication.
+ * 
+ * Examples of common fixtures:
+ * - Authenticated pages (pre-logged in users)
+ * - Test data factories
+ * - API clients for test setup/teardown
+ * - Custom page objects
+ */
 export const test = base.extend({
-  // Add custom fixtures here
-  // Example:
-  // page: async ({ page }, use) => {
-  //   // Custom page setup
+  // Example: Custom authenticated page fixture
+  // authenticatedPage: async ({ page }, use) => {
+  //   // Perform login or authentication setup
+  //   await page.goto('/login');
+  //   await page.fill('input[name="email"]', 'test@example.com');
+  //   await page.fill('input[name="password"]', 'password123');
+  //   await page.click('button[type="submit"]');
+  //   await page.waitForURL('**/dashboard');
   //   await use(page);
+  // },
+  
+  // Example: Test data factory fixture
+  // testData: async ({}, use) => {
+  //   const data = {
+  //     user: { email: 'test@example.com', password: 'password123' },
+  //     // Add more test data as needed
+  //   };
+  //   await use(data);
   // },
 });
 
@@ -180,13 +248,38 @@ export { expect } from '@playwright/test';
     const seedContent = `import { test, expect } from './fixtures';
 
 /**
- * Seed test for Playwright Test Agents.
- * This test sets up the environment and provides a ready-to-use page context.
- * Playwright planner, generator, and healer agents use this as a reference.
+ * Seed Test for Playwright Test Agents
+ * 
+ * This test serves as a reference template for AI-powered test generation:
+ * - Playwright Planner: Uses this to understand test structure and patterns
+ * - Playwright Generator: Uses this as a template for generating new tests
+ * - Playwright Healer: Uses this to understand expected test patterns when healing failures
+ * 
+ * This test demonstrates:
+ * - Basic test structure with fixtures
+ * - Page navigation and interaction patterns
+ * - Assertion patterns with expect
+ * - Best practices for automation
+ * 
+ * Keep this test simple and well-documented to guide AI agents effectively.
  */
-test('seed', async ({ page }) => {
-  // This test uses custom fixtures from ./fixtures
-  // Add any global setup or initialization here
+test('seed - example test structure', async ({ page }) => {
+  // Navigate to a page (update with your application URL)
+  // await page.goto('/');
+  
+  // Example: Wait for page to load
+  // await page.waitForLoadState('networkidle');
+  
+  // Example: Interact with elements using best practices
+  // Use getByRole, getByText, getByLabel instead of CSS selectors when possible
+  // await page.getByRole('button', { name: 'Submit' }).click();
+  
+  // Example: Assertions
+  // await expect(page.getByText('Welcome')).toBeVisible();
+  
+  // This is a placeholder test - replace with actual test logic
+  // or use as a template for generating new tests
+  expect(true).toBe(true);
 });
 `;
     await FileSystemUtils.writeFile(seedPath, seedContent);

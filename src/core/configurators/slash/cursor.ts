@@ -12,19 +12,19 @@ const FRONTMATTER: Record<SlashCommandId, string> = {
 name: /spectest-proposal
 id: spectest-proposal
 category: SpecTest
-description: Scaffold a new SpecTest test change and validate strictly.
+description: Scaffold a new test change and validate strictly.
 ---`,
   apply: `---
 name: /spectest-apply
 id: spectest-apply
 category: SpecTest
-description: Implement an approved SpecTest test change and keep tasks in sync.
+description: Implement an approved test change and keep tasks in sync.
 ---`,
   archive: `---
 name: /spectest-archive
 id: spectest-archive
 category: SpecTest
-description: Archive a deployed SpecTest test change and update test specs.
+description: Archive a deployed test change and update test specs.
 ---`
 };
 

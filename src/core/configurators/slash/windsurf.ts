@@ -17,9 +17,9 @@ export class WindsurfSlashCommandConfigurator extends SlashCommandConfigurator {
 
   protected getFrontmatter(id: SlashCommandId): string | undefined {
     const descriptions: Record<SlashCommandId, string> = {
-      proposal: 'Scaffold a new SpecTest test change and validate strictly.',
-      apply: 'Implement an approved SpecTest test change and keep tasks in sync.',
-      archive: 'Archive a deployed SpecTest test change and update test specs.'
+      proposal: 'Scaffold a new test change and validate strictly.',
+      apply: 'Implement an approved test change and keep tasks in sync.',
+      archive: 'Archive a deployed test change and update test specs.'
     };
     const description = descriptions[id];
     return `---\ndescription: ${description}\nauto_execution_mode: 3\n---`;

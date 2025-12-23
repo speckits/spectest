@@ -111,7 +111,7 @@ export class SpecCommand {
 export function registerSpecCommand(rootProgram: typeof program) {
   const specCommand = rootProgram
     .command('spec')
-    .description('Manage and view SpecTest test specifications');
+    .description('Manage and view test specifications');
 
   // Deprecation notice for noun-based commands
   specCommand.hook('preAction', () => {

@@ -9,15 +9,15 @@ const FILE_PATHS: Record<SlashCommandId, string> = {
 
 const FRONTMATTER: Record<SlashCommandId, string> = {
   proposal: `---
-description: Scaffold a new SpecTest test change and validate strictly.
-argument-hint: request or feature description
+description: Scaffold a new test change and validate strictly.
+argument-hint: test change request or description
 ---`,
   apply: `---
-description: Implement an approved SpecTest test change and keep tasks in sync.
+description: Implement an approved test change and keep tasks in sync.
 argument-hint: change-id
 ---`,
   archive: `---
-description: Archive a deployed SpecTest test change and update test specs.
+description: Archive a deployed test change and update test specs.
 argument-hint: change-id
 ---`
 };

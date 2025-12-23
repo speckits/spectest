@@ -21,7 +21,7 @@ const packageJson = require('../../package.json');
 
 program
   .name('spectest')
-  .description('Spec-first Playwright test automation framework with AI-powered test generation')
+  .description('Spec-first Playwright automation framework with AI-powered test generation')
   .version(packageJson?.version ?? '0.0.0');
 
 // Global options
@@ -123,7 +123,7 @@ program
 // Change command with subcommands
 const changeCmd = program
   .command('change')
-  .description('Manage SpecTest test change proposals');
+  .description('Manage test change proposals');
 
 // Deprecation notice for noun-based commands
 changeCmd.hook('preAction', () => {
