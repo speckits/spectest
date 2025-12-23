@@ -1,9 +1,7 @@
 <p align="center">
   <a href="https://github.com/speckits/spectest">
     <picture>
-      <source srcset="assets/spectest_pixel_dark.svg" media="(prefers-color-scheme: dark)">
-      <source srcset="assets/spectest_pixel_light.svg" media="(prefers-color-scheme: light)">
-      <img src="assets/spectest_pixel_light.svg" alt="SpecTest logo" height="64">
+      <img src="assets/spectest.png" alt="SpecTest logo" height="64">
     </picture>
   </a>
   
